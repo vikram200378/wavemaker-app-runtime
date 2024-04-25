@@ -1,0 +1,212 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+  - Base application context definition for "springapp" DispatcherServlet.
+  -->
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+                http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+    <import resource="config.xml"/>
+    <import resource="springapp-mvc.xml"/>
+
+    <bean id="wmAppContext" class="com.wavemaker.runtime.WMAppContext" lazy-init="false"/>
+
+    <bean id="contentNegotiationManager"
+          class="org.springframework.web.accept.ContentNegotiationManagerFactoryBean">
+        <property name="favorPathExtension" value="false"/>
+    </bean>
+
+    <bean class="com.wavemaker.runtime.spring.converters.ApplicationConversionServiceFactoryBean"
+          id="applicationConversionService">
+        <property name="converters">
+            <list>
+                <bean class="com.wavemaker.runtime.spring.converters.ApplicationConversionServiceFactoryBean$WMStringToDateConverter"/>
+                <bean class="com.wavemaker.runtime.spring.converters.ApplicationConversionServiceFactoryBean$WMStringToTimeConverter"/>
+                <bean class="com.wavemaker.runtime.spring.converters.ApplicationConversionServiceFactoryBean$WMStringToSqlDateConverter"/>
+                <bean class="com.wavemaker.runtime.spring.converters.ApplicationConversionServiceFactoryBean$WMStringToLocalDateTimeConverter"/>
+                <bean class="com.wavemaker.runtime.spring.converters.ApplicationConversionServiceFactoryBean$WMStringToTimestampConverter"/>
+                <bean class="com.wavemaker.runtime.spring.converters.ApplicationConversionServiceFactoryBean$WMStringToExportTypeConverter"/>
+            </list>
+        </property>
+    </bean>
+
+    <!-- Set user.languague to english as Javascript ONLY handles US number formatting -->
+    <bean id="systemPropertyInitializer" class="com.wavemaker.runtime.SystemPropertyInitiliazingBean">
+        <property name="systemProperties">
+            <map>
+                <entry key="user.language" value="en"/>
+            </map>
+        </property>
+    </bean>
+
+    <bean id="wmCompressionFilter" class="com.wavemaker.runtime.filter.compression.WMCompressionFilter"/>
+
+    <bean id="wmRequestFilter" class="com.wavemaker.runtime.web.filter.WMRequestFilter"/>
+
+    <bean id="cacheControlFilter" class="com.wavemaker.runtime.web.filter.CacheControlFilter"/>
+
+    <bean id="cacheFilterConfigFactory" class="com.wavemaker.runtime.filter.etag.CacheFilterConfigFactoryBean"/>
+    <bean id="eTagFilter" class="com.wavemaker.commons.web.filter.EtagFilter"/>
+
+    <bean id="cacheManagementFilter" class="com.wavemaker.runtime.web.filter.CacheManagementFilter"/>
+
+    <bean id="languagePreferenceFilter" class="com.wavemaker.runtime.web.filter.LanguagePreferenceFilter"/>
+
+    <bean id="handlerExceptionResolver"
+          class="com.wavemaker.runtime.exception.resolver.ApplicationRestServiceExceptionResolver"/>
+
+    <bean id="multipartResolver"
+          class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+
+        <property name="resolveLazily" value="true"/>
+        <property name="maxUploadSize" value="300000000"/>
+        <!-- Max size in bytes. -->
+    </bean>
+
+    <bean id="metadatacontroller" class="com.wavemaker.runtime.controller.AppRuntimeController"/>
+
+    <bean id="oAuthIntegrationController" class="com.wavemaker.runtime.auth.oauth2.OAuth2RuntimeIntegrationController"/>
+
+    <bean id="appRuntimeService" class="com.wavemaker.runtime.service.AppRuntimeServiceImpl"/>
+
+    <bean id="appFileSystem" class="com.wavemaker.runtime.app.AppFileSystem"/>
+
+    <bean id="queryDesignService" class="com.wavemaker.runtime.service.QueryDesignServiceImpl"/>
+
+    <bean id="procedureDesignService" class="com.wavemaker.runtime.service.ProcedureDesignServiceImpl"/>
+
+    <bean id="nonHistoryEntitiesFilter" class="com.wavemaker.runtime.data.util.NegatingTypeFilter">
+        <constructor-arg ref="historyEntitiesFilter"/>
+    </bean>
+
+    <bean id="historyEntitiesFilter" class="org.springframework.core.type.filter.AssignableTypeFilter">
+        <constructor-arg value="com.wavemaker.runtime.data.model.TemporalHistoryEntity"/>
+    </bean>
+
+
+    <bean id="serviceDefinitionController"
+          class="com.wavemaker.runtime.servicedef.controller.ServiceDefinitionController"/>
+
+    <bean id="serviceDefinitionService" class="com.wavemaker.runtime.servicedef.service.ServiceDefinitionService"/>
+
+    <bean id="viewResolver"
+          class="org.springframework.web.servlet.view.ResourceBundleViewResolver">
+        <property name="basename" value="views"/>
+    </bean>
+
+    <bean class="com.wavemaker.runtime.file.manager.FileServiceManager" id="FileServiceManager"/>
+
+    <bean id="exportedFileManager" class="com.wavemaker.runtime.file.manager.ExportedFileManagerImpl"/>
+
+    <bean id="tempFilesStorageManager" class="com.wavemaker.commons.io.TempFilesStorageManager"/>
+
+    <bean id="oAuthServiceManager" class="com.wavemaker.runtime.auth.oauth2.service.OAuth2RuntimeServiceManager"/>
+
+    <bean id="dbReport" name="dbReport" class="com.wavemaker.runtime.report.generator.DBJasperReportGenerator"/>
+
+    <bean id="restServiceBeanPostProcessor" class="com.wavemaker.runtime.rest.handler.RestServiceBeanPostProcessor"/>
+
+    <bean id="appRuntimeSessionListener" class="com.wavemaker.runtime.web.AppRuntimeSessionListener"/>
+
+    <bean id="securityService" class="com.wavemaker.runtime.security.SecurityService"/>
+
+    <bean id="propertyPlaceHolderReplacementHelper" class="com.wavemaker.runtime.util.PropertyPlaceHolderReplacementHelper"/>
+
+    <bean class="com.wavemaker.runtime.data.spring.WMPropertyPlaceholderConfigurer">
+        <property name="locations">
+            <list>
+                <value>
+                    classpath:app.properties
+                </value>
+            </list>
+        </property>
+        <property name="ignoreUnresolvablePlaceholders" value="true"/>
+    </bean>
+
+    <bean id="compressionFilterConfig" class="com.wavemaker.runtime.filter.compression.CompressionFilterConfig">
+        <property name="enableCompression" value="${app.web.compression.enabled}"/>
+        <property name="minCompressSize" value="${app.web.compression.minsize}"/>
+        <property name="includeMimeTypes" value="${app.web.compression.mimetypes.includePatterns}"/>
+        <property name="excludeMimeTypes" value="${app.web.compression.mimetypes.excludePatterns}"/>
+    </bean>
+
+
+    <bean id="serverVariableValueProvider" class="com.wavemaker.runtime.system.ServerVariableValueProvider"/>
+
+    <bean id="appEnvironmentVariableValueProvider"
+          class="com.wavemaker.runtime.system.AppEnvironmentVariableValueProvider"/>
+
+    <bean id="messageSource" class="com.wavemaker.commons.i18n.MultipleReloadableResourceBundleMessageSource">
+        <property name="basenames">
+            <list>
+                <value>classpath*:**/**wmapp-messages</value>
+            </list>
+        </property>
+    </bean>
+
+    <bean id="messageSourceResourceBundleLocator"
+          class="org.springframework.validation.beanvalidation.MessageSourceResourceBundleLocator">
+        <constructor-arg ref="messageSource"/>
+    </bean>
+
+    <bean id="resourceBundleMessageInterpolator"
+          class="org.hibernate.validator.messageinterpolation.ResourceBundleMessageInterpolator">
+        <constructor-arg ref="messageSourceResourceBundleLocator"/>
+    </bean>
+
+    <bean id="localeContextMessageInterpolator"
+          class="org.springframework.validation.beanvalidation.LocaleContextMessageInterpolator">
+        <constructor-arg ref="resourceBundleMessageInterpolator"/>
+    </bean>
+
+    <bean id="validator" class="org.springframework.validation.beanvalidation.LocalValidatorFactoryBean">
+        <property name="validationMessageSource" ref="messageSource"/>
+        <!--property name="messageInterpolator" ref="localeContextMessageInterpolator"/-->
+    </bean>
+
+    <bean id="methodValidationPostProcessor"
+          class="org.springframework.validation.beanvalidation.MethodValidationPostProcessor">
+        <property name="validator" ref="validator"/>
+    </bean>
+
+    <bean id="appSSLSocketFactory" class="com.wavemaker.runtime.ssl.SSLSocketFactoryFactoryBean"/>
+
+    <bean id="appHostnameVerifier" class="com.wavemaker.runtime.ssl.HostnameVerifierFactoryBean"/>
+
+    <bean id="servletContext" class="com.wavemaker.runtime.web.ServletContextFactory"/>
+
+    <bean id="messageFactory" class="com.wavemaker.commons.i18n.MessageFactory" factory-method="getInstance">
+        <property name="localeProvider" ref="localeProvider"/>
+        <property name="localeMessageProvider" ref="localeMessageProvider"/>
+    </bean>
+
+    <bean id="localeProvider" class="com.wavemaker.runtime.i18n.AcceptLanguageHeaderBasedLocaleProvider"/>
+
+    <bean id="localeMessageProvider" class="com.wavemaker.runtime.i18n.WMAppLocaleMessageProviderImpl">
+        <constructor-arg>
+            <list>
+                <value>classpath*:i18n/wm</value>
+            </list>
+        </constructor-arg>
+        <constructor-arg>
+            <bean class="org.springframework.web.context.support.ServletContextResourcePatternResolver">
+                <constructor-arg ref="servletContext"/>
+            </bean>
+        </constructor-arg>
+    </bean>
+
+    <bean id="webProcessController" class="com.wavemaker.runtime.webprocess.controller.WebProcessController"/>
+
+    <bean id="requestTrackingFilter" class="com.wavemaker.commons.web.filter.RequestTrackingFilter">
+        <property name="requestTrackingHeaderName" value="X-WM-Request-Track-Id"/>
+        <property name="requestTrackingIdPrefix" value="app"/>
+    </bean>
+
+    <beans profile="wm_preview">
+        <bean id="querycontroller" class="com.wavemaker.runtime.controller.QueryTestRunController"/>
+    </beans>
+
+</beans>

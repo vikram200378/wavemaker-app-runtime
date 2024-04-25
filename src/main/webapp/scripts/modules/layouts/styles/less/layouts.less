@@ -1,0 +1,1735 @@
+/*jslint todo: true */
+
+@import url("wm-widget-mixins.less");
+
+/*Returns Width and Height of an element*/
+.width-height(@width: 100%, @height: 100%) {
+  width: @width;
+  height: @height;
+}
+body {
+  margin: 0;
+}
+/*====================================================================================================================
+  START: Classes for 1 Column Layout
+====================================================================================================================*/
+/*START: Variables**************************************************************************************************/
+@app-standard-padding: 8px;
+@app-standard-margin: 8px;
+
+/*END: Variables**************************************************************************************************/
+.app-controller {
+  .width-height();
+}
+.app-container {
+  position: relative;
+}
+/*Default styles on wrappers*/
+.wm-app > app-root {
+  display: block;
+  height: 100%;
+  width: inherit;
+  > app-page-outlet {
+    display: block;
+    height: 100%;
+    > *:first-child {
+      display: block;
+      height: 100%;
+      .app-header-container, .app-top-nav, .app-left-panel, .app-right-panel, .app-footer {
+        > *:first-child {
+          display: block;
+          height: 100%;
+        }
+      }
+      .app-left-panel >.smoothscroll-container {
+        height: auto;
+      }
+    }
+  }
+}
+/* for dialog which gets created in new view*/
+.app-view {
+  position: absolute;
+  /* Studio specific styles */
+  min-height: 100%;
+  height: inherit;
+  top: 0;
+  left: 0;
+  min-width: 100%;
+  z-index: 1010;
+  .app-dialog {
+    z-index: 1000;
+    &.app-page-dialog {
+      .app-dialog-body {
+        padding: 0;
+      }
+    }
+  }
+  &.canvas-active-widget {
+    z-index: 1015;
+  }
+}
+
+/********************************************************************************
+********************************* Container classes *****************************
+*********************************************************************************/
+
+.app-ng-transclude {
+  position: relative;
+  height: 100%;
+}
+
+.app-panel {
+  position: relative;
+  .panel-body {
+    position: relative;
+    .width-height();
+  }
+  .panel-heading {
+    position: relative;
+    overflow: inherit;
+    .panel-icon, .panel-image-icon {
+      margin-right: 0.5em;
+    }
+    .panel-title{
+      display: table;
+      width: 100%;
+      > a {
+        text-decoration: none;
+        display: table-cell;
+        vertical-align: top;
+      }
+    }
+    .panel-actions{
+      margin-right: 0.2em;
+      white-space: nowrap;
+      display: table-cell;
+      text-align: right;
+      vertical-align: top;
+      .app-menu .app-button, .panel-action {
+        color: inherit;
+        outline: none;
+        .app-anchor {
+          color: inherit;
+          text-decoration: none;
+        }
+        a:hover {
+          text-decoration: none;
+        }
+        background: transparent;
+        box-shadow: none;
+        border: none;
+        padding: 0;
+        margin-left: 1em;
+        .app-anchor > .caret {
+          display: none;
+        }
+      }
+      .label {
+        margin-right: 0.25em;
+      }
+    }
+  }
+  .panel-content {
+    height: 100%;
+    position: relative;
+  }
+  .panel-help-message {
+    overflow: auto;
+    display: none;
+    background: @app-panel-help-background;
+    border-left: 1px @app-panel-border-color solid;
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 20%;
+    height: 100%;
+    z-index: 1000;
+    min-width: 100px;
+    .panel-help-header {
+      background: @app-panel-help-header-color;
+      border-bottom: 1px @app-panel-border-color solid;
+      padding: 0.5em;
+      margin: 0;
+    }
+    .panel-help-content {
+      padding: 0.5em;
+    }
+  }
+  &.show-help {
+    .panel-heading {
+      &.show-help {
+        .panel-actions .glyphicon-question-sign {
+          color: #333;
+        }
+      }
+    }
+    .panel-content {
+      .panel-body {
+        &.show-help {
+          width: 79%;
+        }
+      }
+      .panel-help-message {
+        &.show-help {
+          display: block;
+        }
+      }
+    }
+  }
+  &.fullscreen {
+    position: fixed;
+    z-index: 1049;
+    left: 0.2em;
+    right: 0.2em;
+    top: 0.2em;
+    bottom: 0.2em;
+    margin: 0 !important;
+    .panel-content {
+      overflow: auto;
+    }
+    .app-panel-footer {
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: 0;
+    }
+  }
+}
+.app-dialog {
+  .app-panel.fullscreen {
+    height: 95vh;
+  }
+}
+.app-panel-footer {
+  position: relative;
+}
+.app-panel[enablefullscreen='true']:not(.fullscreen) {
+  .color-picker{
+    position: absolute !important;
+  }
+}
+
+/********************************************************************************
+********************************* Card styles *****************************
+********************************************************************************/
+
+.app-card {
+  position: relative;
+  &.card {
+    margin-bottom: 1em;
+    margin-left: 0.5em;
+    margin-right: 0.5em;
+    background-color: #fff;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    box-shadow: 0 0.2rem 0.3rem 0 rgba(0,0,0,.2),0 1px 1px 0 rgba(0,0,0,.14),0 2px 1px -1px rgba(0,0,0,.12);
+    .app-label {
+      &:not(.text-muted) {
+        color: inherit;
+      }
+    }
+    .app-card-header {
+      display: table;
+      width: 100%;
+      padding: .75em 0.5em;
+      background-color: rgba(0,0,0,0.05);
+      .app-card-avatar {
+        display: table-cell;
+        height: 32pt;
+        width: 32pt;
+        text-align: center;
+        vertical-align: top;
+        padding-top: .75rem;
+        img {
+          width: 24pt;
+          height: 24pt;
+        }
+        .app-icon {
+          font-size: 30pt;
+        }
+      }
+      .app-card-header-text {
+        display: table-cell;
+        vertical-align: top;
+        padding-left: 0.5em;
+        padding-top: .75rem;
+      }
+      .panel-actions {
+        .panel-action {
+          >.app-anchor {
+            >.app-icon {
+              top: 3px;
+            }
+          }
+        }
+      }
+    }
+    .card-heading {
+      font-size: 1.2em;
+      letter-spacing: .005em;
+      margin: 0;
+    }
+
+    .card-subheading {
+      font-size: 1em;
+      letter-spacing: .010em;
+      margin: 0;
+    }
+    .app-card-image {
+      width: 100%;
+      height: 100%;
+      position: relative;
+      overflow: hidden;
+      text-align: center;
+      background-color: rgba(0,0,0,0.3);
+      img {
+        position: relative;
+        width: 100%;
+      }
+      .card-image-headline {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        padding: 0 1.25rem;
+        color: #fff;
+        font-size: 1.5em;
+      }
+    }
+    .app-card-content {
+      position: relative;
+      padding: 1em;
+    }
+    .app-card-actions {
+      position: relative;
+      padding: 0.5rem 1.25rem;
+      .btn {
+        padding-left: 8px;
+        padding-right: 8px;
+      }
+      .app-icon {
+        font-size: 18pt;
+        vertical-align: middle;
+      }
+
+    }
+    .app-card-footer {
+      position: relative;
+      padding: 0.5rem 1.25rem;
+      border-top: 1px solid rgba(0, 0, 0, 0.1);
+      .btn-group {
+        box-shadow: none;
+        .btn {
+          color: inherit;
+          &:hover {
+            color: initial;
+          }
+        }
+      }
+    }
+    .card-title {
+      margin-bottom: .75rem;
+      font-size: 1.2em;
+      width: 100%;
+      font-weight: bold;
+    }
+    .card-text {
+      margin-bottom: 1rem;
+      font-size: 1em;
+      width: 100%;
+    }
+  }
+}
+
+/********************************************************************************
+********************************* Wizard styles *****************************
+********************************************************************************/
+.app-wizard {
+  position: relative;
+  min-height: 4em;
+  .app-wizard-steps {
+    position: relative;
+    border-bottom: 1px rgba(0, 0, 0, 0.1) solid;
+    &.nav-justified { //Fix for mobile layout which causing steps to show one below other
+      .app-wizard-step {
+        display: table-cell;
+        width: 1%;
+      }
+    }
+    .app-wizard-step {
+      position: relative;
+      a {
+        cursor: not-allowed;
+        padding: 0 20px;
+        line-height: 46px;
+        margin-bottom: 0;
+      }
+      &.current {
+        pointer-events: none;
+        a {
+          cursor: default;
+        }
+      }
+      &.active {
+        pointer-events: all;
+        a {
+          cursor: pointer;
+          border-radius: 0;
+        }
+      }
+      &.current {
+        a, a:hover, a:focus, a:active {
+          background-color: #fff;
+        }
+      }
+      &.disabled {
+        a, a:hover, a:focus, a:active {
+          background-color: #eee;
+        }
+      }
+      .step-title {
+        position: relative;
+        line-height: 1;
+        display: inline-block;
+        vertical-align: middle;
+      }
+      &:not(:last-child) {
+        .arrow {
+          width: 28px;
+          height: 28px;
+          display: inline-block;
+          background-color: inherit;
+          right: -15px;
+          position: absolute;
+          top: 9px;
+          z-index: 99;
+          border: 1px solid rgba(0, 0, 0, 0.1);
+          border-bottom-width: 0;
+          border-left-width: 0;
+          -ms-transform: rotate(45deg) skew(11deg, 11deg);
+          -o-transform: rotate(45deg) skew(11deg, 11deg);
+          -moz-transform: rotate(45deg) skew(11deg, 11deg);
+          -webkit-transform: rotate(45deg) skew(11deg, 11deg);
+          transform: rotate(45deg) skew(11deg, 11deg);
+        }
+      }
+    }
+  }
+  .app-wizard-body {
+    position: relative;
+    .app-wizard-step-content {
+      position: relative;
+      display: none;
+      height: 100%;
+      min-height: 4em;
+      &.current {
+        display: block;
+      }
+    }
+  }
+  .app-wizard-actions {
+    .app-wizard-skip {
+      margin-top: 8px;
+      position: absolute;
+      text-decoration: underline;
+      cursor: pointer;
+    }
+    .app-wizard-actions-right {
+      text-align: right;
+      .app-button {
+        margin-right: 8px;
+      }
+    }
+    &.left {
+      .app-wizard-actions-right {
+        text-align: left;
+      }
+
+      .app-wizard-skip {
+        right: 12px;
+      }
+    }
+  }
+}
+
+/********************************************************************************
+********************************* Application layout classes *****************************
+*********************************************************************************/
+
+.wm-app {
+  height: 100%;
+  position: relative;
+  // Required for left panel swipe transition
+  &.wm-mobile-app:not(.domcontent) {
+    overflow: hidden;
+  }
+  #wm-app-content , .app-page, .app-partial, .app-included-page {
+    .width-height();
+    position: relative;
+    background-color: inherit;
+  }
+  /*********************************************************************************************************************/
+  /***********************************overriding the bootstrap styles*************************************************/
+  /*********************************************************************************************************************/
+  .container {
+    max-width: 100%;
+    padding: 0;
+    margin: 0;
+  }
+  .row {
+    margin: 0;
+  }
+  /*********************application header********************/
+  .app-header {
+    position: relative;
+    display: block;
+    float: none; /**added to support bootstrap col-*-* classes**/
+    margin-left: auto;
+    margin-right: auto;
+    .app-header-container {
+      height: 100%;
+      position: relative;
+    }
+    .app-grid-layout .app-grid-row .app-grid-column {
+      overflow: inherit;
+    }
+  }
+  /*********************application footer********************/
+  .app-footer {
+    position: relative;
+    display: block;
+    float: none; /**added to support bootstrap col-*-* classes**/
+    margin-left: auto;
+    margin-right: auto;
+    .app-grid-layout .app-grid-row .app-grid-column {
+      overflow: inherit;
+    }
+  }
+  /*********************application content********************/
+  @app-page-content-loader-fg-color: rgba(0,0,0,0.5);
+  .app-content {
+    position: relative;
+    .width-height();
+    display: table;
+    float: none; /**added to support bootstrap col-*-* classes**/
+    margin-left: auto;
+    margin-right: auto;
+    background-color: inherit;
+    .app-content-row {
+      .width-height();
+      position: relative;
+      display: table;
+      .app-left-panel {
+        float: none;
+      }
+      .app-content-column {
+        height: 100%;
+        position: relative;
+        vertical-align: top;
+        display: table-cell;
+        float: none;
+      }
+      > .app-row {
+        .width-height();
+        position: relative;
+        display: table-row;
+        > .app-column, > .app-content-column {
+          height: 100%;
+          position: relative;
+          vertical-align: top;
+          display: table-cell;
+          float: none;
+        }
+      }
+    }
+    .app-page-content {
+      > .app-ng-transclude {
+        opacity: 1;
+        transition: opacity 0.5s ease-in-out;
+      }
+      &.load {
+        overflow: hidden;
+        > :not(.app-page-content-loader) {
+          opacity: 0;
+        }
+      }
+    }
+  }
+  /*********************application content vertical scroll fix********************/
+  .app-top-nav + .app-content {
+    @media (min-width: 768px){
+      .calc('height', ~"calc(100% - 13.6em)");
+    }
+  }
+  //No topnav layouts
+  .app-header + .ng-hide + .app-content {
+    @media (min-width: 768px){
+      .calc('height', ~"calc(100% - 9.3em)");
+    }
+  }
+  /*********************application left panel********************/
+  .app-left-panel {
+    height: 100%;
+    padding: 0;
+    vertical-align: top;
+    display: table-cell;
+    float: none;
+    .nav li {
+      margin: 0;
+      padding: 0;
+      word-break: break-word;
+    }
+    .app-popover {
+      display: block;
+    }
+    .nav-pills li > .btn {
+      width: 100%;
+      text-align: left;
+    }
+  }
+  .app-left-panel, .app-right-panel {
+    .nav {
+      .app-nav-item {
+        .badge {
+          right: 1em;
+          top: 1em;
+        }
+        > .btn {
+          margin-top: 0;
+        }
+      }
+      &.nav-tabs {
+        border-color: transparent;
+      }
+      &.nav-pills.nav-stacked > li {
+        display: inline-block;
+        width: 100%;
+        > .dropdown.open > .dropdown-menu {
+          margin: 0;
+        }
+      }
+    }
+  }
+  /*********************application right panel********************/
+  .app-right-panel {
+    height: 100%;
+    padding: 0;
+    vertical-align: top;
+    display: table-cell;
+    float: none;
+    .nav li {
+      margin: 0;
+      padding: 0;
+      word-break: break-word;
+    }
+  }
+  /*********************application top nav********************/
+  .app-top-nav {
+    position: relative;
+    display: block;
+    float: none; /**added to support bootstrap col-*-* classes**/
+    margin-left: auto;
+    margin-right: auto;
+    ul {
+      margin-bottom: 0;
+    }
+  }
+  /*********************breadcrumb********************/
+  .app-breadcrumb {
+    position: relative;
+    label {
+      margin-bottom: 0;
+    }
+  }
+
+  /********************************* Navbar classes *****************************/
+  .app-navbar {
+    .container-fluid .navbar-header .navbar-toggle{
+      i {
+        font-size: 18pt;
+      }
+    }
+    .navbar-toggle {
+      margin-top: 4px;
+      margin-bottom: 4px;
+      &:hover, &:focus {
+        color: inherit;
+      }
+      > i.glyphicon {
+        font-size: 18pt;
+      }
+    }
+    .app-nav-item {
+      .app-anchor .anchor-caption {
+        vertical-align: inherit;
+      }
+    }
+  }
+  /********************************* Nav classes *****************************/
+  .app-nav {
+    position: relative;
+    min-height: 20px;
+    .app-nav-item {
+      position: relative;
+      .btn {
+        margin-top: 8px;
+      }
+    }
+    .app-nav-icon {
+      margin-right: 8px;
+    }
+    .app-nav-item > .dropdown {
+      display: block;
+      cursor: pointer;
+      > a.dropdown-toggle {
+        text-decoration: none;
+        display: inline-block;
+        width: 100%;
+        padding: 10px 15px;
+        border: none;
+      }
+    }
+  }
+
+  /*********************************************************************************************************************/
+  /***********************************grid styles***********************************************************************/
+  /*********************************************************************************************************************/
+  .app-grid-layout {
+    width: 100%;
+    position: relative;
+    empty-cells: show;
+    &.condensed {
+    }
+    &.standard {
+      .app-grid-column {
+        padding:0 1em;
+      }
+    }
+  }
+  .app-grid-row {
+    width: 100%;
+    position: relative;
+  }
+  .app-grid-column {
+    padding: 0;
+    position: relative;
+    vertical-align: top;
+    height: 100%;
+    overflow: inherit;
+    border-width: 0;
+  }
+
+  /***********************************Form styles***********************************************************************/
+  .app-form, .app-liveform, .app-device-liveform, .app-livefilter, .app-livelist {
+    position: relative;
+    border-collapse: separate;
+    > .panel-body {
+      padding: 4px 4px 0 4px;
+    }
+    .app-label {
+      overflow: hidden;
+      text-overflow: ellipsis;
+      word-break: break-word;
+    }
+    .help-block {
+      font-size: 0.8em;
+      padding: 0 1.25em;
+    }
+
+    input:focus.ng-invalid {
+      border-color: crimson;
+    }
+    .file-readonly {
+      pointer-events: none;
+    }
+    .form-action {
+      text-align: right;
+      width: 100%;
+      float: none;
+      display: block;
+      padding: 4px 12px;
+      box-shadow: none;
+      .btn, .app-anchor {
+        margin: 0 0 0 4px;
+        float: none;
+        border-radius: 4px;
+      }
+    }
+
+    .control-label {
+      overflow: hidden;
+      text-overflow: ellipsis;
+      word-wrap: break-word;
+      padding-top: 7px;
+    }
+    .form-control-static {
+      font-weight: normal;
+      padding: 8px 12px 0 12px;
+    }
+
+    .ng-hide-animate {
+      display: none !important;
+    }
+    .app-message {
+      .close {
+        font-size: 16px;
+      }
+      &.form-inline {
+        label {
+          float: none;
+          width: auto;
+        }
+      }
+    }
+
+    .full-width {
+      width: 100%;
+    }
+    .full-height {
+      height: 100%;
+    }
+  }
+  /****************Alignment and position classes******************************/
+  .app-form, .app-liveform, .app-device-liveform, .app-livefilter {
+    /****************Caption Align Right******************************/
+    &.align-right {
+      .app-label {
+        text-align: right;
+      }
+      .caption-top {
+        .form-control, .app-toggle, .app-ratings, .input-group, .app-checkboxset, .app-radioset, .app-checkbox {
+          float: right;
+        }
+      }
+      .app-checkboxset .app-checkbox, .app-radioset .app-radio {
+        float: none;
+        label {
+          text-align: left;
+        }
+      }
+    }
+    /****************Caption Align Middle******************************/
+    &.align-center {
+      .app-label {
+        text-align: center;
+      }
+      .caption-top {
+        text-align: center;
+        .form-control {
+          text-align: center;
+          width: 100%;
+        }
+      }
+      .input-group, .app-blob-upload {
+        display: inline-table;
+      }
+    }
+
+    /************** Fixing widgets when Position Right is applied on the parent ****************/
+
+    .app-checkboxset, .app-radioset {
+      margin-bottom:0;
+    }
+    /*To remove the animation caused by ng-show/ng-hide*/
+    .ng-hide-add, .ng-hide-remove {
+      transition: 0s linear all;
+    }
+  }
+
+  .app-liveform-dialog {
+    .app-dialog-body {
+      padding: 0;
+    }
+  }
+  /****************Caption Position top do not remove for old projects******************************/
+  [captionposition="top"]{
+    .control-label {
+      width: 100%;
+    }
+  }
+ /*******Caption Styling in the composite widget********/
+  .app-composite-widget {
+    &.caption-right {
+      .form-control, .input-group, .app-ratings, .app-toggle, .app-switch, .app-fileupload, .app-button-wrapper, .control-label, .app-checkbox, .app-checkboxset, .app-radioset, .app-blob-upload {
+        float: right;
+      }
+      .app-checkboxset .app-checkbox, .app-radioset .app-radio {
+        float: none;
+        label {
+          text-align: left;
+        }
+      }
+      //Datetime, date & time widgets
+      .app-datetime, .app-date, .app-timeinput {
+        .dropdown-menu {
+          left: 0 !important; /*!important is used to overwrite the inline styles*/
+          white-space: normal; /*In order to prevent the UI from breaking*/
+        }
+      }
+
+      //Tab Widget
+      .app-tabs {
+        .nav {
+          &.nav-tabs {
+            text-align: right;
+          }
+        }
+      }
+
+      .app-slider {
+        text-align: right; /*IE9 support*/
+        .range-input {
+          margin-top: 0.5em;
+        }
+      }
+    }
+    &.caption-top {
+      .control-label {
+        width:100%
+      }
+    }
+  }
+
+  .app-search {
+    .app-textbox.ng-hide-animate {
+      display: none !important;
+    }
+  }
+  .app-checkbox {
+    width: auto;
+  }
+
+  .live-field {
+    .app-search {
+        //In form layout search width should be 75% as such as others.
+        width: 75%;
+    }
+    &.form-group {
+      .app-blob-upload {
+        opacity: 1;
+        position: relative;
+      }
+      .help-block {
+        width: 75%;
+        margin: 0;
+        &.text-danger, &.control-label.text-danger {
+          color: crimson;
+        }
+      }
+    }
+    .ng-touched.ng-invalid .form-control {
+      border-color:  crimson;
+    }
+  }
+
+  /************************************************** Page Transitions *************************************************/
+
+  .transform(@transformValue){
+    transform: @transformValue;
+    -webkit-transform: @transformValue;
+    -moz-transform: @transformValue;
+    -ms-transform: @transformValue;
+  }
+
+  .animation(@name, @duration){
+    -webkit-animation: @name @duration ease-in;
+    -moz-animation: @name @duration ease-in;
+    -o-animation: @name @duration ease-in;
+    animation: @name @duration ease-in;
+  }
+
+  @-webkit-keyframes toAndFro{
+    0%{
+      -webkit-transform : translate3d(0, 0, 0);
+    }
+    50% {
+      -webkit-transform : translate3d(1000%, 0, 0);
+    }
+    100%{
+      -webkit-transform : translate3d(0, 0, 0);
+    }
+  }
+
+  @keyframes toAndFro {
+    from {
+      transform: translate3d(0, 0, 0);
+    }
+    50% {
+      transform: translate3d(100vw, 0, 0);
+    }
+    to {
+      transform: translate3d(0, 0, 0);
+    }
+  }
+
+  .wmScaleInLeft {
+    .animation('wmScaleInLeft', 0.3s);
+  }
+
+  @-webkit-keyframes wmScaleInLeft {
+    0%, 100% {
+      transform-origin: left top 0;
+    }
+    0% {
+      opacity: 0;
+      .transform(scale3d(0.1, 0.1, 1));
+    }
+    100% {
+      .transform(scale3d(1, 1, 1));
+    }
+  }
+
+  /* Standard syntax */
+  @keyframes wmScaleInLeft {
+    0%, 100% {
+      transform-origin: left top 0;
+    }
+    0% {
+      opacity: 0;
+      .transform(scale3d(0.1, 0.1, 1));
+    }
+    100% {
+      .transform(scale3d(1, 1, 1));
+    }
+  }
+
+  .wmScaleInRight {
+    .animation('wmScaleInRight', 0.3s);
+  }
+
+  @-webkit-keyframes wmScaleInRight {
+    0%, 100% {
+      transform-origin: right top 0;
+    }
+    0% {
+      opacity: 0;
+      .transform(scale3d(0.1, 0.1, 1));
+    }
+    100% {
+      .transform(scale3d(1, 1, 1));
+    }
+  }
+
+  /* Standard syntax */
+  @keyframes wmScaleInRight {
+    0%, 100%{
+      transform-origin: right top 0;
+    }
+    0% {
+      opacity: 0;
+      .transform(scale3d(0.1, 0.1, 1));
+    }
+    100% {
+      .transform(scale3d(1, 1, 1));
+    }
+  }
+
+  .wmScaleInTopLeft {
+    .animation('wmScaleInTopLeft', 0.3s);
+  }
+
+  @-webkit-keyframes wmScaleInTopLeft {
+    0%, 100% {
+      transform-origin: left bottom 0;
+    }
+    0% {
+      opacity: 0;
+      .transform(scale3d(0.1, 0.1, 1));
+    }
+    100% {
+      .transform(scale3d(1, 1, 1));
+    }
+  }
+
+  /* Standard syntax */
+  @keyframes wmScaleInTopLeft {
+    0%, 100% {
+      transform-origin: left bottom 0;
+    }
+    0% {
+      opacity: 0;
+      .transform(scale3d(0.1, 0.1, 1));
+    }
+    100% {
+      .transform(scale3d(1, 1, 1));
+    }
+  }
+
+  .wmScaleInTopRight {
+    .animation('wmScaleInTopRight', 0.3s);
+  }
+
+  @-webkit-keyframes wmScaleInTopRight {
+    0%, 100% {
+      transform-origin: right bottom 0;
+    }
+    0% {
+      opacity: 0;
+      .transform(scale3d(0.1, 0.1, 1));
+    }
+    100% {
+      .transform(scale3d(1, 1, 1));
+    }
+  }
+
+  /* Standard syntax */
+  @keyframes wmScaleInTopRight {
+    0%, 100% {
+      transform-origin: right bottom 0;
+    }
+    0% {
+      opacity: 0;
+      .transform(scale3d(0.1, 0.1, 1));
+    }
+    100% {
+      .transform(scale3d(1, 1, 1));
+    }
+  }
+
+  .wmSlideInDown {
+    -webkit-animation: wmSlideInDown 0.3s ease-in;
+    animation: wmSlideInDown 0.3s ease-in;
+  }
+
+  @-webkit-keyframes wmSlideInDown {
+    from {
+      -webkit-transform: translate3d(0, -20%, 0);
+      transform: translate3d(0, -20%, 0);
+      opacity: 0.1;
+    }
+
+    to {
+      -webkit-transform: translate3d(0, 0, 0);
+      transform: translate3d(0, 0, 0);
+      opacity: 1;
+    }
+  }
+
+  @keyframes wmSlideInDown {
+    from {
+      -webkit-transform: translate3d(0, -20%, 0);
+      transform: translate3d(0, -20%, 0);
+      opacity: 0.1;
+    }
+
+    to {
+      -webkit-transform: translate3d(0, 0, 0);
+      transform: translate3d(0, 0, 0);
+      opacity: 1;
+    }
+  }
+  .wmSlideInUp {
+    -webkit-animation: wmSlideInUp 0.3s ease-out;
+    animation: wmSlideInUp 0.3s ease-out;
+  }
+
+  @-webkit-keyframes wmSlideInUp {
+    from {
+      -webkit-transform: translate3d(0, 20%, 0);
+      transform: translate3d(0, 20%, 0);
+      visibility: visible;
+    }
+
+    to {
+      -webkit-transform: translate3d(0, 0, 0);
+      transform: translate3d(0, 0, 0);
+    }
+  }
+
+  @keyframes wmSlideInUp {
+    from {
+      -webkit-transform: translate3d(0, 20%, 0);
+      transform: translate3d(0, 20%, 0);
+      visibility: visible;
+    }
+
+    to {
+      -webkit-transform: translate3d(0, 0, 0);
+      transform: translate3d(0, 0, 0);
+    }
+  }
+
+  @-webkit-keyframes flipEntry {
+    0% {
+      opacity: 0;
+      -webkit-transform: perspective(1000px) rotateY(180deg);
+    }
+    50%{opacity: 0;}
+    51% {opacity : 1;}
+    100% {
+      opacity : 1;
+      -webkit-transform: perspective(1000px) rotateY(0deg);
+    }
+  }
+
+  @keyframes flipEntry {
+    0% {
+      opacity: 0;
+      .transform(perspective(1000px) rotateY(180deg));
+    }
+    50%{opacity: 0;}
+    51% {opacity : 1;}
+    100% {
+      opacity : 1;
+      .transform(perspective(1000px) rotateY(0deg));
+    }
+  }
+
+  @-webkit-keyframes flipExit {
+    0% {
+      opacity: 1;
+      -webkit-transform: perspective(1000px) rotateY(0deg);
+    }
+    50%{opacity: 1;}
+    51% {opacity : 0;}
+    100% {
+      opacity : 0;
+      -webkit-transform: perspective(1000px) rotateY(-180deg);
+    }
+  }
+
+  @keyframes flipExit {
+    0% {
+      opacity: 1;
+      .transform(perspective(1000px) rotateY(0deg));
+    }
+    50%{opacity: 1;}
+    51% {opacity : 0;}
+    100% {
+      opacity : 0;
+      .transform(perspective(1000px) rotateY(-180deg));
+    }
+  }
+
+  @-webkit-keyframes flipReverseEntry {
+    0% {
+      opacity: 0;
+      -webkit-transform: perspective(1000px) rotateY(-180deg);
+    }
+    50%{opacity: 0;}
+    51% {opacity : 1;}
+    100% {
+      opacity : 1;
+      -webkit-transform: perspective(1000px) rotateY(0deg);
+    }
+  }
+  @keyframes flipReverseEntry {
+    0% {
+      opacity: 0;
+      .transform(perspective(1000px) rotateY(-180deg));
+    }
+    50%{opacity: 0;}
+    51% {opacity : 1;}
+    100% {
+      opacity : 1;
+      .transform(perspective(1000px) rotateY(0deg));
+    }
+  }
+
+  @-webkit-keyframes flipReverseExit {
+    0% {
+      opacity: 1;
+      -webkit-transform: perspective(1000px) rotateY(0deg);
+    }
+    50%{opacity: 1;}
+    51% {opacity : 0;}
+    100% {
+      opacity : 0;
+      -webkit-transform: perspective(1000px) rotateY(180deg);
+    }
+  }
+
+  @keyframes flipReverseExit {
+    0% {
+      opacity: 1;
+      .transform(perspective(1000px) rotateY(0deg));
+    }
+    50%{opacity: 1;}
+    51% {opacity : 0;}
+    100% {
+      opacity : 0;
+      .transform(perspective(1000px) rotateY(180deg));
+    }
+  }
+
+  app-root {
+    >.page-transition >* {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      -webkit-backface-visibility: visible !important;
+      backface-visibility: visible !important;
+      -webkit-animation-duration: 0.3s;
+      animation-duration: 0.3s;
+      -webkit-animation-timing-function: ease-in-out;
+      animation-timing-function: ease-in-out;
+      -webkit-animation-fill-mode: forwards;
+      animation-fill-mode: forwards;
+      .app-page > .app-left-panel {
+        display: none;
+      }
+    }
+
+    >.page-transition-slide {
+      >:nth-child(1) {
+        -webkit-animation-name: slideOutLeft;
+        animation-name: slideOutLeft;
+      }
+      >:nth-child(2) {
+        -webkit-animation-name: slideInRight;
+        animation-name: slideInRight;
+      }
+    }
+
+    >.page-transition-slide-exit {
+      >:nth-child(1) {
+        -webkit-animation-name: slideOutRight;
+        animation-name: slideOutRight;
+      }
+      >:nth-child(2) {
+        -webkit-animation-name: slideInLeft;
+        animation-name: slideInLeft;
+      }
+    }
+
+    /** popup **/
+    >.page-transition-pop >:nth-child(2) {
+      -webkit-animation-name: zoomIn;
+      animation-name: zoomIn ;
+    }
+
+    >.page-transition-pop-exit {
+      >:nth-child(1) {
+        z-index: 1;
+        -webkit-animation-name: zoomOut;
+        animation-name: zoomOut;
+      }
+      >:nth-child(2) {
+        z-index: 0;
+      }
+    }
+
+    >.page-transition-flip {
+      >:nth-child(1) {
+        -webkit-animation-name: flipExit;
+        animation-name: flipExit;
+      }
+      >:nth-child(2) {
+        -webkit-animation-name: flipEntry;
+        animation-name: flipEntry;
+      }
+    }
+
+    >.page-transition-flip-exit {
+      >:nth-child(1) {
+        -webkit-animation-name: flipReverseExit;
+        animation-name: flipReverseExit;
+      }
+      >:nth-child(2) {
+        -webkit-animation-name: flipReverseEntry;
+        animation-name: flipReverseEntry;
+      }
+    }
+
+    /** fade **/
+    >.page-transition-fade >:nth-child(2) {
+      -webkit-animation-name: fadeIn;
+      animation-name: fadeIn;
+    }
+    >.page-transition-fade-exit >:nth-child(1) {
+      -webkit-animation-name: fadeOut;
+      animation-name: fadeOut;
+      z-index: 1;
+    }
+  }
+}
+/************************** APP CAROUSEL ***************************************/
+.app-carousel{
+  position : relative;
+  overflow : hidden;
+  div.carousel-inner{
+    height : 100%;
+    white-space: nowrap;
+
+    .app-carousel-item {
+      display: inline-block;
+      position: absolute;
+      width: 100%;
+      &.item {
+        overflow : hidden;
+        height : 100%;
+        display: inline-block;
+        position: absolute;
+        width: 100%;
+        transition: none;
+
+        img {
+          width: 100%;
+        }
+        &.left-item {
+          left: -100%;
+        }
+        &.right-item {
+          left: 100%;
+        }
+      }
+    }
+  }
+  &.carousel {
+    height: inherit;
+  }
+  .carousel {
+    height: 100%;
+  }
+  carousel {
+     &.hide-navs, &.hide-both {
+      .carousel-control {
+        display: none;
+      }
+    }
+    &.hide-indicators, &.hide-both {
+      .carousel-indicators {
+        display: none;
+      }
+    }
+  }
+  .carousel-control {
+    .wi-chevron-left, .wi-chevron-right {
+      position: absolute;
+      top: 50%;
+      z-index: 5;
+      display: inline-block;
+      margin-top: -10px;
+      font-size: 32pt;
+    }
+    .wi-chevron-right {
+      right: 50%;
+    }
+    .wi-chevron-left {
+      left: 50%;
+    }
+  }
+  .carousel-indicators {
+    li {
+      border-color: #ccc !important;
+    }
+  }
+}
+/**********************************Template classes****************************************************************/
+/**************************************************************************************************/
+.app-template {
+  &.app-page {
+    .app-header {
+      height: 6em;
+      text-align: center;
+    }
+    .app-footer {
+      text-align: center;
+    }
+  }
+}
+
+/**************************************************************************************************/
+/**************************************************************************************************/
+/**************************default theme ***************************************/
+@app-background-color: #fff;
+@app-panel-help-header-color: #eee;
+@app-panel-border-color: #ddd;
+@app-panel-help-background: #FFFED0;
+@app-search-container-bg-color: #f8f8f8;
+
+.wm-app {
+  background-color: @app-background-color;
+  //hide the left panel icon by default
+  .app-header-menu, .app-header-action {
+    display: none;
+  }
+  .app-header-action {
+    .badge {
+      right: 1em;
+      top: 0em;
+      border-radius: 50%;
+      padding: 3px 5px;
+    }
+    + .dropdown-menu {
+      right: 0;
+      left: auto;
+    }
+  }
+  .app-prefab .app-page {
+    width: 100%;
+  }
+  /**********************************************************************/
+  /********************Overrides for the content classes**************************/
+  /**********************************************************************/
+  /***override the chart tooltip style***/
+  .app-page-content {
+    padding: 1em;
+    &.login { // for login page remove the paddings
+      padding: 0;
+    }
+    .btn-group, .btn-group-vertical {
+      margin: 0;
+      .btn {
+        float: none;
+      }
+    }
+  }
+//Removes padding for menu in popover nature
+  .app-menu .dropdown-menu {
+      padding: 0;
+  }
+  //util for checkbox and radio text color
+  .text-color-inherit {
+    label {
+      color: inherit !important;
+    }
+  }
+  /***setting the default size of waviocn****/
+  .wi {
+    font-family: "wavicon";
+    width: auto;
+    height: auto;
+  }
+
+  .nvtooltip {
+    font-family: inherit;
+    table {
+      background-color: transparent;
+    }
+  }
+
+  .app-tile.panel {
+    margin-bottom: 0;
+  }
+
+  label {
+    font-weight: normal;
+  }
+
+  .control-label {
+    font-weight: bold;
+  }
+
+  .navbar {
+    border-radius: 0;
+    margin-bottom: 0;
+    .navbar-brand {
+      margin-left: 1em;
+      margin-right: 1em;
+      .brand-image {
+        display: inline-block;
+        margin-right: 0.5em;
+      }
+    }
+    .app-nav-item {
+      >.dropdown,  >.app-popover-wrapper {
+        > a.dropdown-toggle , > a {
+          padding-top: 1.417em;
+          padding-left: 1.428571429em;
+          padding-right: 1.428571429em;
+          padding-bottom: 1.417em;
+        }
+        &.open {
+          > a {
+            background-color: transparent;
+          }
+        }
+      }
+    }
+  }
+
+  /********button classes ***/
+  .btn.btn-transparent , .btn-transparent{
+    background: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
+    padding: 0;
+    text-align: center;
+    &:hover {
+      color: inherit;
+    }
+  }
+  .btn {
+    &.btn-rounded {
+      border-radius: 500px;
+      padding: 0.45em 0.75em;
+      height: auto;
+      > * {
+        vertical-align: middle;
+      }
+    }
+    &.btn-fab {
+      font-size: 24px;
+      width: 38pt;
+      height: 38pt;
+      box-shadow: rgba(0, 0, 0, 0.117647) 0 1px 2px 0, rgba(0, 0, 0, 0.239216) 0 1px 1px 0;
+      border-radius: 50%;
+      position: relative;
+      overflow: hidden;
+      line-height: normal;
+      padding: 0;
+      &.btn-lg {
+        width: 48pt;
+        height: 48pt;
+      }
+      &.btn-sm {
+        width: 30pt;
+        height: 30pt;
+      }
+      .app-icon {
+        padding: 0 .06em;
+        vertical-align: middle;
+      }
+    }
+    &.btn-raised {
+      &:hover {
+        box-shadow: 0 4px 5px 0 rgba(0,0,0,.14), 0 1px 10px 0 rgba(0,0,0,.12), 0 2px 4px -1px rgba(0,0,0,.2);
+      }
+      &:active {
+        box-shadow: 0 0 8px rgba(0,0,0,.18), 0 8px 16px rgba(0,0,0,.36);
+      }
+    }
+    &.btn-link {
+      box-shadow: none;
+    }
+  }
+  /********for buttons, anchors with icon on top****/
+  .btn[icon-position = "top"], a[icon-position = "top"] {
+    height: auto;
+    text-align: center;
+    i.app-icon, .btn-caption, .anchor-caption {
+      display: block;
+    }
+  }
+  /********for buttons, anchors with icon on right****/
+  .btn[icon-position = "right"], a[icon-position = "right"] {
+    direction: rtl;
+    i.app-icon {
+      margin: 0 0 0 0.5em;
+    }
+  }
+  /****Badge****/
+  .btn .badge, a .badge {
+    right: -1em;
+    top: -1em;
+    font-weight: normal;
+    z-index: 3;
+    &.btn-link {
+      top: 0;
+      right: 0;
+    }
+  }
+  /****Top navbar badge****/
+  .app-navbar {
+    .app-nav-item {
+      .btn .badge, a .badge {
+        top: 0;
+      }
+    }
+  }
+  /***reset the margin for the panel***/
+  .app-livelist.panel {
+    margin-bottom: 0;
+  }
+  /****toggle button****/
+  .app-toggle.checkbox {
+    margin-top: 0;
+    display: inline-block;
+  }
+  /*****fix for checkboxes in teh old project****/
+  .checkbox.col-md-push-3, .radio.col-md-push-3 {
+    max-width: 75%;
+  }
+  /***adding padding when there are 2 checkboxes or radio are placed*****/
+  .form-group {
+    .checkbox + .checkbox , .radio + .radio {
+      margin-top: 10px;
+    }
+  }
+  .checkbox + .list-group-item.checkbox , .radio + .list-group-item.radio  {
+    margin-top: 0;
+  }
+
+  .p {
+    width: 100%;
+    word-wrap: break-word;
+  }
+  .h1,.h2,.h3,.h4,.h5,.h6 {
+    word-wrap: break-word;
+  }
+  .inline {
+    display: inline;
+  }
+  .bold {
+    font-weight: bold;
+  }
+  .bordered {
+    border: 1px solid rgba(0,0,0,0.2);
+  }
+  .bordered-left {
+    border-left: 1px solid rgba(0,0,0,0.2);
+  }
+  .bordered-right {
+    border-right: 1px solid rgba(0,0,0,0.2);
+  }
+  .bordered-top {
+    border-top: 1px solid rgba(0,0,0,0.2);
+  }
+  .bordered-bottom {
+    border-bottom: 1px solid rgba(0,0,0,0.2);
+  }
+  .vertical-align-top {
+    vertical-align: top;
+  }
+  .vertical-align-bottom {
+    vertical-align: bottom;
+  }
+  .vertical-align-middle {
+    vertical-align: middle;
+  }
+  .text-ellipsis {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    width: 100%;
+    max-width: 100%;
+  }
+  .no-border {
+    box-shadow: none !important;
+    border: 0 !important;
+  }
+  /****livelist specific classes***/
+  .app-livelist {
+    .media-body {
+      overflow: inherit;
+    }
+  }
+  .panel-heading {
+    .description:not(:empty) {
+      font-size: .75em;
+      margin-top: 5px;
+    }
+  }
+// styles for iscroll wrapper and scroller.
+  .smoothscroll-wrapper {
+    overflow: hidden !important;
+  }
+  .smoothscroll-container {
+    position: absolute;
+    width: 100%;
+  }
+
+  //Angular UI bootstrap 1.1.0 related styles.
+  .ng-animate.item:not(.left):not(.right){-webkit-transition:0s ease-in-out left;transition:0s ease-in-out left};
+  .uib-datepicker .uib-title{width:100%;}
+  .uib-daypicker, .uib-datepicker, .uib-monthpicker, .uib-yearpicker {
+     > table {width:100%;}
+   }
+  .uib-day button,.uib-month button,.uib-year button{min-width:100%;}
+  .uib-datepicker-popup.dropdown-menu{display:block;}
+  .uib-button-bar{padding:10px 9px 2px;}
+  .uib-time input{width:50px;}
+  [uib-typeahead-popup].dropdown-menu{display:block;}
+}

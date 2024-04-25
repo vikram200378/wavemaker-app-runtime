@@ -1,0 +1,499 @@
+.wm-app {
+@app-mobile-nav-font-size: 11pt;
+@app-mobile-nav-icon-size: 18pt;
+@app-mobile-tabbar-icon-size: 20pt;
+@app-mobile-nav-height: 36pt;
+@app-mobile-tabbar-height: 48pt;
+@app-mobile-tabbar-active-item-bg-color: rgba(0,0,0,0.1);
+@app-mobile-nav-searchinput-border: #fff;
+@app-mobile-nav-button-padding: (@app-mobile-nav-height - @app-mobile-nav-font-size)/2;
+  /*****Removing outline*****/
+  * {
+    outline: none !important;
+  }
+/********************************************************************************
+*************************************** Mobile Left Panel ***********************
+*********************************************************************************/
+.wm-mobile-app-left-panel{
+  left: 0;
+  transform: translate3d(0, 0,0);
+  .mobile-left-panel();
+}
+/********************************************************************************
+*************************************** Mobile layouts *********************************
+*********************************************************************************/
+.app-page.mobile-app-page {
+  //IE: hide clear button in search box
+  input[type="search"]::-ms-clear {
+    display: none;
+  }
+  .app-content {
+    display: block;
+    height: 100%;
+    .app-content-row {
+      display: block;
+      .app-content-column {
+        display: block;
+        overflow: auto;
+      }
+    }
+  }
+  .app-mobile-navbar {
+    & ~ .app-search.full-screen {
+      .calc('height', ~"calc(100% - @{app-mobile-nav-height} - 1pt)") !important;
+      margin: 0;
+      top: @app-mobile-nav-height;
+        &.inline {
+        height: auto !important;
+      }
+    }
+    & + .app-content {
+      .calc('height', ~"calc(100% - @{app-mobile-nav-height} - 1pt)") !important;
+      margin: 0;
+    }
+  }
+  &.has-tabbar {
+    .app-mobile-navbar + .app-content {
+      .calc('height', ~"calc( 100% - @{app-mobile-nav-height} - @{app-mobile-tabbar-height} - 1pt)") !important;
+    }
+  }
+  &.has-tabbar-top .app-mobile-navbar + .app-content {
+      margin-top: @app-mobile-tabbar-height;
+  }
+}
+/********************************************************************************
+*************************************** Tab Bar *********************************
+*********************************************************************************/
+.app-tabbar {
+  position: absolute;
+  padding: 0;
+  width: 100%;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 100;
+  &.top {
+    top: @app-mobile-nav-height;
+  }
+  &.bottom {
+    bottom: 0;
+    position: absolute;
+  }
+  .app-icon {
+    font-size: @app-mobile-tabbar-icon-size;
+    max-height: @app-mobile-tabbar-icon-size;
+    vertical-align: top;
+  }
+  >.navbar {
+    border: none;
+    border-radius: 0 !important;
+  }
+  .navbar {
+    margin: 0;
+    .navbar-nav {
+      text-align: center;
+      background-color: inherit;
+      margin: 0;
+      width: 100%;
+      &.tab-items {
+        display: table;
+        height: 100%;
+        table-layout: fixed;
+        width: 100%;
+        > li {
+          display: table-cell;
+          float: none;
+          vertical-align: middle;
+          height: 100%;
+          width: 100%;
+        }
+      }
+      > li {
+        > a {
+          text-align: center;
+          padding: 8pt 0;
+          height: @app-mobile-tabbar-height;
+          &.active {
+            background-color: @app-mobile-tabbar-active-item-bg-color;
+          }
+          > label {
+            display: block;
+            text-align: center;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            margin: 0;
+            color: inherit;
+          }
+        }
+      }
+      .dropdown {
+        background-color: inherit;
+        display: none;
+        position: static;
+        .dropdown-menu {
+          background-color: inherit;
+          position: absolute !important;
+          border-radius: 0;
+          display: block;
+          border: 0;
+          left: 0;
+          right: 0;
+          &.navbar-nav {
+            > li {
+              float: left;
+              width: 25%;
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+/********************************************************************************
+**************************** Mobile Navbar ***********************
+*********************************************************************************/
+.app-mobile-navbar {
+  position: relative;
+  z-index: 100;
+  overflow: inherit;
+  font-size: @app-mobile-nav-font-size;
+  .btn {
+    outline-color: transparent;
+    box-shadow: none;
+  }
+  .navbar-btn {
+    padding: 0;
+  }
+  .mobile-navbar-left {
+    float: left;
+    min-width: 1em;
+    min-height: 1px;
+  }
+
+  .mobile-navbar-right {
+    float: right;
+    min-height: 1px;
+  }
+
+  .mobile-navbar-center {
+    max-width: 50%;
+    float: left;
+    min-height: 1px;
+  }
+
+  .navbar {
+    border: 0;
+    margin: 0;
+    min-height: 0;
+    .badge {
+      right: 0;
+      top: 0;
+    }
+    > div {
+      padding: 0;
+      height: 100%;
+      background-color: inherit;
+    }
+    .navbar-header {
+      width: 100%;
+      height: @app-mobile-nav-height;
+      .navbar-brand {
+        text-align: center;
+        height: 100%;
+        float: none;
+        margin: 0;
+        padding: 0;
+        font-size: inherit;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        line-height: @app-mobile-nav-height;
+        > * {
+          vertical-align: middle;
+        }
+      }
+    }
+    .navbar-nav {
+      margin: auto;
+      .btn-back > * {
+        vertical-align: middle;
+      }
+      &.navbar-left {
+        white-space:nowrap;
+      }
+      &.navbar-right {
+        text-align: right;
+        .dropdown {
+          > .app-button, > a {
+            font-size: inherit;
+            padding: 0 5pt;
+            line-height: @app-mobile-nav-height;
+            border: 0;
+          }
+          .dropdown-menu {
+            position: absolute;
+            right: 0;
+            left: auto;
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.175);
+            background-color: #fff;
+            > li > a {
+              &:hover {
+                background-color: rgba(0,0,0,0.1);
+              }
+            }
+          }
+        }
+      }
+      > li {
+        display: inline-block;
+        vertical-align: top;
+        white-space: nowrap;
+        height: @app-mobile-nav-height;
+        > .app-menu, > .app-popover {
+          > a {
+            line-height: @app-mobile-nav-height;
+            text-decoration: none;
+            color: inherit;
+          }
+          .caret {
+            display: none;
+          }
+        }
+        i {
+          font-size: @app-mobile-nav-icon-size;
+          vertical-align: middle;
+        }
+        > a, .navbar-btn {
+          display: inline-block;
+          line-height: @app-mobile-nav-height;
+          padding: 0 5pt;
+          color: inherit;
+          &:hover {
+            background-color: transparent;
+          }
+        }
+      }
+    }
+    /* navbar with searchbar */
+    &.searchbar {
+      .mobile-navbar-left{
+        display: table-cell;
+        width: auto;
+      }
+      .mobile-navbar-right {
+        display: none;//for default android
+        width: auto;
+      }
+      .mobile-navbar-center {
+        display: table-cell;
+        position: relative;
+        width: 82%;
+        max-width: 82%;
+        ::-webkit-input-placeholder { color: inherit; }
+        ::-moz-placeholder { color: inherit; } /* firefox 19+ */
+        :-ms-input-placeholder { color: inherit; } /* ie */
+        input:-moz-placeholder { color: inherit; }
+        .app-mobile-search {
+          width: 100%;
+          display: inline-block;
+          position: relative;
+          margin-left: 2px;
+          top: 5pt;
+          left: 5pt;
+          border-bottom: 1px solid @app-mobile-nav-searchinput-border;
+          .form-control {
+            width : 100%;
+            background-color: transparent;
+            border: 0;
+            padding: 5pt 18pt 5pt 22pt;
+            color: inherit;
+            font-size: inherit;
+            height: auto;
+            box-shadow: none;
+            text-overflow: ellipsis;
+            overflow: hidden;
+          }
+
+          .dropdown-menu {
+            width: 100%;
+            max-height: 200px;
+            overflow-y: auto;
+          }
+          .btn-close {
+            position: absolute;
+            padding: 6pt;
+            top: 1px;
+            right: 10px;
+            z-index: 10;
+          }
+
+          &:before {
+            content: "\f002";
+            font-family: FontAwesome;
+            font-style: normal;
+            font-weight: normal;
+            text-decoration: inherit;
+            /*--adjust as necessary--*/
+            position: absolute;
+            top: 6pt;
+            left: 6pt;
+            font-size: unit((@app-mobile-nav-icon-size - 4) , pt) ;
+          }
+        }
+      }
+    }
+  }
+}
+}
+
+/********************************************************************************
+**************************** PullToRefresh Styles ***********************
+*********************************************************************************/
+.refresh-container {
+  position: absolute;
+  width: 100%;
+  top: 0;
+  text-align: center;
+  transition: transform 200ms linear;
+  display: none;
+  z-index: 5;
+  &.entry {
+    position: relative;
+    top: 0;
+  }
+  &.ios-refresh-container {
+    position: relative;
+  }
+}
+.android-spinner {
+  height: 32px;
+  width: 32px;
+  display: inline-block;
+  box-shadow: 1px 1px 10px #333;
+  border-radius: 150px;
+  &.spin {
+    svg {
+      animation: android-spinner-spin 1.8s linear infinite;
+    }
+  }
+  svg {
+    width: 100%;
+    height: 100%;
+  }
+  path {
+    fill: transparent;
+    stroke-width: 10%;
+    stroke-linecap: round;
+  }
+}
+
+@keyframes android-spinner-spin {
+  0% {
+    transform: rotateZ(0deg);
+  }
+  50% {
+    transform: rotateZ(360deg);
+  }
+  100% {
+    transform: rotateZ(720deg);
+  }
+}
+
+.ios-spinner {
+  height: 50px;
+  width: 50px;
+  display: inline-block;
+  svg {
+    width: 100%;
+    height: 100%;
+    line {
+      stroke-width: 2px;
+      stroke-linecap: round;
+      opacity: 1;
+
+      .compute-opacity(@n, @i: 1) when (@i =< @n) {
+        &:nth-child(@{i}) {
+          opacity: 1 - (@i * 0.1);
+        }
+        .compute-opacity(@n, (@i + 1));
+      }
+      .compute-opacity(9);
+    }
+  }
+}
+
+/********************************************************************************
+**************************** List Action Styles ***********************
+*********************************************************************************/
+.app-livelist {
+  .list-group {
+    overflow: hidden;
+  }
+  li.app-list-item {
+    -webkit-transition: -webkit-transform 0.2s linear;
+    transition: transform 0.2s linear;
+  }
+  .app-listtemplate {
+    &.hide-view {
+      display: none !important;
+    }
+  }
+  .app-list-item-action-panel {
+    display: inline-block;
+    position: relative;
+    width: 100%;
+    &:after {
+      clear: both;
+    }
+    &.app-list-item-right-action-panel {
+      text-align: right;
+    }
+    &.app-listtemplate {
+      button {
+        height: 90px;
+      }
+    }
+  }
+  .actionMenu {
+    text-align: right;
+    button {
+      height: 100%;
+      border-width: 0;
+      font-weight: bold;
+      border-radius: 0;
+      position: absolute;
+      -webkit-transform: translate3d(0, 0, 0);
+      -webkit-transition: -webkit-transform 0.2s linear;
+      transform: translate3d(0, 0, 0);
+      transition: transform 0.2s linear;
+    }
+    &.app-list-item-left-action-panel {
+      button {
+        right: 100%;
+      }
+    }
+    &.app-list-item-right-action-panel {
+      button {
+        left: 100%;
+      }
+    }
+  }
+}
+/**************************************************************************************************/
+/**************************************************************************************************/
+/**************************default theme ***************************************/
+@app-background-color: #fff;
+
+.wm-app {
+  background-color: @app-background-color;
+
+  .app-page-content {
+    padding: 0;
+  }
+
+/**********************************************************************/
+/********************Overrides for the content classes**************************/
+/**********************************************************************/
+
+}

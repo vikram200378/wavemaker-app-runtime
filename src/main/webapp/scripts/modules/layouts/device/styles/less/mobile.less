@@ -1,0 +1,575 @@
+@import url("wm-widget-mixins.less");
+
+@app-mobile-nav-height: 36pt;
+@app-mobile-nav-icon-size: 18pt;
+@app-search-container-bg-color: #f8f8f8;
+@app-standard-padding: 8px;
+
+
+@keyframes pageContainerCollapse {
+  100% {
+    -webkit-transform: translate3d(-90%, 0, 0);
+    transform: translate3d(-90%, 0, 0);
+  }
+  95% {
+    -webkit-transform: translate3d(-100%, 0, 0);
+    transform: translate3d(-100%, 0, 0);
+  }
+}
+@keyframes leftPanelCollapse {
+  0% {
+    -webkit-transform: translate3d(-90%, 0, 0);
+    transform: translate3d(-90%, 0, 0);
+  }
+  50% {
+    -webkit-transform: translate3d(-100%, 0, 0);
+    transform: translate3d(-100%, 0, 0);
+  }
+}
+.mobile-left-panel(){
+  display: block;
+  height: 100%;
+  overflow: auto;
+  transition: left 0.5s  ease-in-out;
+  position: fixed;
+  top: 0;
+  &.slide-in{
+    position: absolute;
+    z-index: 0;
+    left:0;
+    &.left-panel-collapsed {
+      z-index: 99;
+      opacity: 0;
+      -webkit-transform: translate3d(-100%, 0, 0);
+      transform: translate3d(-100%, 0, 0);
+    }
+    &.left-panel-expanded {
+      opacity: 1;
+      -webkit-transform: translate3d(-100%, 0, 0);
+      transform: translate3d(-100%, 0, 0);
+      z-index: 101;
+    }
+  }
+  &.slide-over {
+    left: 0;
+    z-index: 101;
+    opacity: 1;
+    &.left-panel-collapsed {
+      opacity: 0;
+      -webkit-transform: translate3d(-100%, 0, 0);
+      transform: translate3d(-100%, 0, 0);
+    }
+    &.left-panel-expanded {
+      -webkit-transform: translate3d(0, 0, 0);
+      transform: translate3d(0, 0, 0);
+    }
+  }
+  &.swipee-transition:before {
+    content: '';
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    display: block;
+    opacity: 0;
+    z-index: 100;
+  }
+  .dropdown-submenu {
+    > a > .caret.fa-caret-right:before {
+      content: "\f0d7";
+    }
+    > .dropdown-menu {
+      float: none;
+      position: relative;
+      left: 0;
+      box-shadow: none;
+      width: 100%;
+      border-radius: 0;
+    }
+  }
+}
+.device-common(@device : xs){
+/* Styles */
+  &.wm-app {
+    .app-page{
+      left: 0;
+      height: 100%;
+      width: 100%;
+      &.slide-in-left-panel-container,
+      &.slide-over-left-panel-container{
+        z-index: 0;
+        &.left-panel-expanded-container:after {
+//          background: rgba(0, 0, 0, 0.5);
+          position: absolute;
+          top: 0;
+          width: 100%;
+          height: 100%;
+          content: "";
+          display: block;
+          z-index: 100;
+        }
+      }
+      &.slide-in-left-panel-container {
+        overflow: visible;
+        transition: left 0.5s  ease-in-out;
+        /* Move all fixed position elements as well */
+        .app-header:not(.app-mobile-navbar),
+        .app-search {
+          transition: left 0.5s  ease-in-out;
+        }
+      }
+    }
+    #wm-mobile-display {
+      display: block;
+    }
+
+    .app-header {
+      height: @app-mobile-nav-height !important;
+      width: 100%;
+      position: fixed;
+      z-index: 100;
+      display: table;
+      top: 0;
+      .app-header-menu {
+        display: table-cell;
+        width: 18pt;
+        vertical-align: top;
+      }
+      .app-header-container {
+        display:table-cell;
+      }
+      .app-header-actions {
+        display: inline-block;
+      }
+      .app-header-action {
+        font-size: @app-mobile-nav-icon-size;
+        text-decoration: none;
+        cursor: pointer;
+        display: inline-block;
+        width: 18pt;
+        line-height: @app-mobile-nav-height;
+        vertical-align: middle;
+        color: inherit;
+        padding: 0 !important;
+        .app-icon {
+          font-size: 1em;
+        }
+        .badge {
+          right: -1em;
+        }
+      }
+      .app-grid-layout {
+        display: table;
+        padding: 0;
+        white-space: nowrap;
+        .app-grid-row {
+          display: table-row;
+          padding: 0;
+          .app-grid-column {
+            display: table-cell;
+            padding: 0 0.5em !important;
+          }
+        }
+      }
+      .application-name {
+        font-size: 14pt !important;
+        max-width: 80pt;
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+        vertical-align: middle;
+      }
+      /********provide the margin top if the header exist*******/
+      & + .app-top-nav, & + .app-content {
+        margin-top: @app-mobile-nav-height;
+      }
+
+      .app-picture {
+        max-height: unit((@app-mobile-nav-height - 2) , pt);
+      }
+
+    /*Search widget container (available only in Mobile)*/
+      .app-search {
+        z-index: 3000;
+        position: fixed;
+        left: 0;
+        top: @app-mobile-nav-height;
+        display: none;
+        margin: 0;
+        right: 0;
+        background-color: @app-search-container-bg-color;
+        padding: @app-standard-padding;
+        border-bottom: 1px rgba(0,0,0,0.1) solid;
+        width: 100% !important;
+        .dropdown-menu {
+          width: 95%;
+        }
+      }
+      .app-navbar {
+        padding: 0;
+      }
+    }
+    .app-top-nav{
+      z-index: 1;
+    }
+    /***setting back the behavior of bootstrap for mobile****/
+    .app-grid-layout{
+      height: auto !important;
+    }
+
+    /***making the height of the datagrid auto****/
+    .app-datagrid {
+      overflow: auto;
+      width: 100%;
+      .app-grid-header {
+        &.scroll-visible {
+          padding-right: 0;
+        }
+      }
+      .app-grid-content {
+        overflow: auto;
+        height: auto !important;
+      }
+      .table-container {
+        height: auto !important;
+        .table {
+          table-layout: auto;
+        }
+      }
+    }
+    .app-grid {
+      .panel-footer {
+        display: block;
+        .app-datagrid-actions {
+          display: block;
+          width: 100%;
+        }
+        .app-datagrid-paginator  {
+          display: block;
+        }
+      }
+    }
+
+    .app-page .app-left-panel {
+      .mobile-left-panel()
+    }
+
+    .app-right-panel {
+      width: 100% !important;
+      height: auto;
+      display: block;
+    }
+    /****panel classes*****/
+    .app-panel{
+      &.show-help {
+        .panel-help-message {
+          display: block;
+          width: 50%;
+        }
+        .panel-body {
+          width: 100%;
+        }
+      }
+    }
+
+    .app-content {
+      width: 100%;
+    /***setting back the behavior of bootstrap for mobile****/
+      .app-content-row {
+        display: block;
+        width: 100%;
+        clear: both;
+        .app-content-column, .app-page-content {
+          display: block;
+          width: 100%;
+        }
+        /********old projects*******/
+        > .app-row {
+          display: block;
+          width: 100%;
+          clear: both;
+          > .app-column {
+            display: block;
+          }
+        }
+      }
+
+
+    }
+    .app-top-nav {
+      color: #999;
+      .app-navbar {
+        padding: 0;
+      }
+      .navbar-toggle {
+       border: none;
+        &:hover, &:active {
+          background-color: transparent;
+        }
+      }
+      .app-list {
+        display: block;
+        .app-nav-item {
+          display: block;
+          .app-button, .app-anchor{
+            text-align: left;
+            display: block;
+            width: 100%;
+          }
+        }
+      }
+      .app-menu {
+        width: 100%;
+        &.open {
+          &.horizontal {
+            display: block;
+            ul.dropdown-submenu {
+              position: relative;
+            }
+          }
+        }
+        ul.dropdown-menu, li.dropdown-submenu {
+          width: 100%;
+          &.horizontal {
+            li {
+              display: block;
+            }
+          }
+          > a > .caret.fa-caret-right:before {
+            content: "\f0d7";
+          }
+        }
+      }
+    }
+  /*******************************************************************************************
+  **************************************form group******************************************************
+  ********************************************************************************************/
+    .form-group .form-control-static {
+      /*supporting full width in form*/
+      + .form-control, + .app-select-wrapper > .form-control, + .app-input-wrapper > .form-control {
+        width: 100%;
+        + .help-block {
+          width: 100%;
+        }
+      }
+    }
+    .live-field {
+      .app-search {
+        width: 100%;
+      }
+      &.form-group .help-block {
+          width: 100%;
+      }
+    }
+  /********************************************************************************
+  **************************** Mobile Calendar ***********************
+  *********************************************************************************/
+  .app-datetime, .app-date {
+    .uib-daypicker {
+      tbody{
+        .btn-default {
+          margin-bottom: .5em;
+        }
+      }
+    }
+  }
+
+/*Toaster styles*/
+    #toast-container {
+      left: 0;
+      width: 100%;
+      &.toast-center-center {
+        margin-left: 0;
+      }
+    }
+    #toast-container > div {
+      padding: 1.3em 4em;
+      width: 100%;
+      margin-bottom: 0;
+    }
+  }
+}
+.mobile-common(@device: xs) {
+  .device-common(@device);
+  .wm-app .app-page {
+    &.slide-in-left-panel-container {
+      //position: fixed;
+      width: 100%;
+      left: 0;
+      &.left-panel-expanded-container {
+        .compute-left-position(@n:0) when (@n <= 12) {
+          &.left-panel-container-@{device}-@{n} {
+            -webkit-transform: translate3d((1 - @n / 12)*100%, 0, 0);
+            transform: translate3d((1 - @n / 12)*100%, 0, 0);
+      }
+          .compute-left-position(@n + 1);
+        }
+        .compute-left-position();
+      }
+      &.left-panel-collapsed-container {
+        -webkit-transform: translate3d(0, 0, 0);
+        transform: translate3d(0, 0, 0);
+        z-index: 0;
+      }
+    }
+  }
+}
+.tab-common(@device: sm) {
+  .wm-tablet-app {
+    .device-common(@device);
+    &.wm-app {
+      .mobile-app-page.app-page {
+        &.container.slide-in-left-panel-container {
+          &.left-panel-collapsed-container {
+            width: ~"calc(100% - 40pt)";
+            margin-left: 40pt;
+            transform: translate3d(0, 0, 0);
+            -webkit-transform: translate3d(0, 0, 0);
+          }
+          &.left-panel-expanded-container {
+            .compute-left-position(@n:0) when (@n <= 12) {
+              &.left-panel-container-@{device}-@{n} {
+                width: (@n / 12)*100%;
+                margin-left: (1 - @n / 12)*100%;
+                }
+              .compute-left-position(@n + 1);
+            }
+            .compute-left-position();
+          }
+          &:after {
+            display: none;
+          }
+        }
+        .wm-mobile-app-left-panel.slide-in {
+          position: fixed;
+          left: 0;
+          opacity: 1;
+          -webkit-transform: translate3d(0, 0, 0);
+          transform: translate3d(0, 0, 0);
+          animation: none;
+          overflow: hidden;
+          &.left-panel-collapsed {
+            z-index: 0;
+            margin-left: -40pt;
+          }
+          &.left-panel-collapsed::before {
+            content: '';
+            width: 100%;
+            height: 100%;
+            position: absolute;
+            display: block;
+            opacity: 1;
+            z-index: 100;
+          }
+          &.left-panel-collapsed .app-nav > .app-nav-item {
+            > .app-anchor, > .dropdown .dropdown-toggle {
+              > .app-icon {
+                font-size: 2em;
+              }
+              > .anchor-caption, > .caption {
+                display: none;
+              }
+            }
+            .dropdown.open {
+              .dropdown-menu {
+                display: none;
+              }
+            }
+          }
+        }
+      }
+      .app-mobile-navbar{
+        position: relative;
+        z-index: 100;
+      }
+    }
+  }
+}
+
+/* Smartphones (portrait) ----------- */
+@media only screen
+and (min-device-width : 299px)
+and (max-device-width : 480px) {
+    .mobile-common()
+}
+/* Small web screens(portrait) ----------- */
+@media only screen
+and (min-width : 299px)
+and (max-width : 480px) {
+    .mobile-common()
+}
+
+/* Small web screens(landscape) ----------- */
+@media only screen
+and (min-device-width : 481px)
+and (max-device-width : 767px) {
+    .mobile-common()
+}
+
+@media only screen
+and (min-width : 481px)
+and (max-width : 767px) {
+  .mobile-common()
+}
+
+/* Smartphones (landscape) ----------- */
+@media only screen
+and (min-width : 321px) {
+/* Styles */
+}
+
+/* Smartphones (portrait) ----------- */
+@media only screen
+and (max-width : 320px) {
+/* Styles */
+}
+
+/* iPads (portrait and landscape) ----------- */
+@media only screen
+and (min-device-width : 768px)
+and (max-device-width : 1024px) {
+/* Styles */
+}
+
+/* iPads (landscape) ----------- */
+@media only screen
+and (min-device-width : 768px)
+and (max-device-width : 1024px)
+and (orientation : landscape) {
+/* Styles */
+}
+
+/* iPads (portrait) ----------- */
+@media only screen
+and (min-device-width : 768px)
+and (max-device-width : 1024px)
+and (orientation : portrait) {
+/* Styles */
+}
+
+/* iPads (portrait and landscape) ----------- */
+@media only screen
+and (min-device-width : 768px) {
+  /* Styles */
+  .tab-common()
+}
+
+/* Desktops and laptops ----------- */
+@media only screen
+and (min-width : 1224px) {
+/* Styles */
+}
+
+/* Large screens ----------- */
+@media only screen
+and (min-width : 1824px) {
+/* Styles */
+}
+
+/* iPhone 4 ----------- */
+@media
+only screen and (-webkit-min-device-pixel-ratio : 1.5),
+only screen and (min-device-pixel-ratio : 1.5) {
+/* Styles */
+}
+
+

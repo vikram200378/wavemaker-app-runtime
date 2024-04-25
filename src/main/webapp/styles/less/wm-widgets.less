@@ -1,0 +1,3923 @@
+@import url("wm-widget-mixins.less");
+
+/* variables */
+@app-date-border-color: #AAAAAA;
+
+/*----- named constants -----*/
+@red: #FF0000;
+@white: #FFFFFF;
+@black: #000000;
+
+/*----- Standard constants -----*/
+@app-standard-margin: 8px;
+@app-standard-size: 8;
+@app-standard-size-pixels: unit(@app-standard-size, px);
+@app-standard-padding: 8px;
+@app-standard-border-radius: 4px;
+@app-standard-border-color: #CCCCCC;
+@app-standard-shadow-color: #666666;
+@wm-standard-border-color: rgba(0, 0, 0, 0.1);
+//Following variables are used as mixins are being used & the variables with wm prefix are being called in those mixins
+@wm-image-base-url: "../images";
+
+
+/*----- dialog color variables -----*/
+@app-modal-body-bg-color: #FBFBFB;
+
+
+/*Color for all warning messages*/
+@app-warning-text-color: @red;
+
+/*Color for all type of messages*/
+@wm-app-msg-success-color: #6A8969;
+@wm-app-msg-info-color: #479ED6;
+@wm-app-msg-error-color: #AF4565;
+@wm-app-msg-warning-color: #caad16;
+
+.full-height {
+  height: 100%;
+}
+
+/*------ Spinner variables ------*/
+@wm-app-spinner-bg-color: rgba(0,0,0,.15);
+@wm-app-spinner-msg-bg-color: rgba(255,255,255,.5);
+@wm-app-spinner-border-color: #aeaeae;
+
+/*default values on html and body to show full screen*/
+html, body {
+  .width-height();
+}
+
+.wm-app.wm-mobile-app > app-root > app-page-outlet{
+  overflow: hidden;
+}
+
+app-page-outlet.page-load-in-progress {
+  overflow: hidden;
+}
+
+.ng-hide {
+  display: none !important;
+}
+
+/*Define required classes for showing icons*/
+.app-icon {
+  display: inline-block;
+  position: relative;
+  padding-right: .2em;
+}
+
+/*glyphicons*/
+.wm-app .breadcrumb {
+  i {
+    padding-right: .2em;
+  }
+}
+
+//Icon widget styles
+.app-icon-wrapper {
+  display: inline-block;
+  position: relative;
+  white-space: nowrap;
+  max-width: 100%;
+  overflow: hidden;
+  &[icon-position="right"] {
+    direction: rtl;
+    .app-label {
+      direction: ltr;//To avoid direction change within label with special characters
+    }
+  }
+  .app-icon {
+    vertical-align: middle;
+  }
+  .app-label {
+    vertical-align: middle;
+    margin: 0;
+    text-overflow: ellipsis;
+    max-width: 92%;
+    overflow: hidden;
+  }
+}
+
+/*error message for missing partial*/
+.app-partial-info {
+  text-align: center;
+  .partial-message {
+    padding: 0 .25em;
+    border-radius: 0.25em;
+    border: 1px #9E9D9D solid;
+    text-align: center;
+    background: #575757;
+    color: #fff;
+    display: inline-block;
+  }
+}
+
+/*overrides default toaster properties*/
+.custom-toaster {
+  padding: 0 !important;
+  width: 100% !important;
+  color: #333;
+}
+
+/*====================================================================================================================
+  START - Widgets (the elements that are dragged into the canvas by user) Styling
+  The prefix "app-" represents all the widgets that are dragged onto the canvas.
+====================================================================================================================*/
+/*******************************************************************************
+*********************************Mobile Support*********************************
+*******************************************************************************/
+#wm-mobile-display {
+  width: 1px;
+  height: 1px;
+  position: absolute;
+  z-index: -1000;
+  display: none;
+  top: 0;
+}
+/********************************************************************************
+*********************************Search Widget*****************************************
+*********************************************************************************/
+.app-search-dropdown() {
+  width: auto;
+  text-align: left;
+  z-index: 2000 !important; /*Over-write bootstrap style so that search results appear on top of any content*/
+  max-height: 200px;
+  overflow-y: auto;
+  span {
+    padding-left: 4px;
+    text-overflow: ellipsis;
+    width: auto;
+    display: inline-block;
+    overflow: hidden;
+    line-height: 1em;
+    max-width: 100%;
+  }
+  img {
+    line-height: 1em;
+  }
+  .status {
+    padding: 8px 15px;
+    text-align: center;
+    font-size: 12px;
+    background-color: rgba(0,0,0,0.05);
+    border-top: 1px solid rgba(0,0,0,0.1);
+    span {
+      overflow: initial;
+    }
+  }
+}
+.app-search {
+  width: 30em;
+  position: relative;
+  vertical-align: middle;
+  input {
+    height: 100%;
+    &.model-holder {
+      width: 0;
+      height: 0;
+      position: absolute;
+      top: 30px;
+      left: 50%;
+      z-index: -1000;
+      opacity: 0;
+    }
+  }
+  .app-search-button {
+    .remove-background();
+    border: none;
+    padding: 0;
+    &:focus {
+      outline: none;
+    }
+  }
+  &.dropdown-menu {
+    .app-search-dropdown();
+  }
+  .dropdown-menu {
+    .app-search-dropdown();
+  }
+  .form-control-feedback {
+    right: 3em !important;
+    &.clear-btn, &.back-btn {
+      display: none;
+    }
+  }
+}
+.wm-app {
+  .app-search {
+    [uib-typeahead-popup].dropdown-menu {
+      display: none;
+    }
+  }
+  .app-search.full-screen {
+    &.input-group {
+      width: 100% !important;
+      position: fixed;
+      display: block;
+      background-color: #fff;
+      height: 100%;
+      z-index: 5000;
+      border-radius: 0;
+      top: 0;
+      left: 0;
+      input {
+        padding-left: 2.5em;
+        border-bottom: 1px solid rgba(0,0,0,0.5);
+      }
+    }
+    typeahead-container {
+      &.dropdown {
+        &.open {
+          top: 0 !important;
+          height: 100% !important;
+        }
+      }
+    }
+    .input-group-addon {
+      display: none;
+    }
+    .dropdown-menu {
+      display: block;
+      position: relative;
+      width: 100%;
+      .calc('height', ~"calc(100% - 36px)");
+      overflow: auto;
+      max-height: initial;
+      top: 0 !important;
+    }
+    .clear-btn, .back-btn {
+      right: 0.25em !important;
+      cursor: pointer;
+      pointer-events: initial;
+      display: block;
+      z-index: 5001;
+    }
+    .back-btn {
+      left: 0;
+    }
+  }
+
+  .visible-xs-block,
+  .visible-xs-inline,
+  .visible-xs-inline-block,
+  .visible-sm-block,
+  .visible-sm-inline,
+  .visible-sm-inline-block,
+  .visible-md-block,
+  .visible-md-inline,
+  .visible-md-inline-block,
+  .visible-lg-block,
+  .visible-lg-inline,
+  .visible-lg-inline-block {
+    &[hidden] {
+      display: none !important;
+    }
+  }
+}
+/*To override the bootstrap style to app-search class, specificity has been increased*/
+.wm-app .input-group.app-search {
+  display: inline-table;
+  width: 100%;
+}
+
+/*To prevent the file upload from breaking in Firefox*/
+.wm-app input[type="file"] {
+  padding: 0;
+}
+
+/********************************************************************************
+*********************************Loader Widget*****************************************
+*********************************************************************************/
+.app-spinner {
+  .width-height();
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 1050;
+  text-align: center;
+  background-color: @wm-app-spinner-bg-color;
+  &.spinner-transparent {
+    background-color: transparent;
+    .spinner-message {
+      background-color: transparent;
+      border: none;
+    }
+  }
+  .spinner-messages {
+    p {
+      text-align: left;
+      margin:0 0.4em;
+    }
+    margin: 0;
+  }
+  &.app-page-switch {
+    .spinner-image {
+      color: #888;
+    }
+    .spinner-message {
+      background-color: transparent;
+      border: transparent;
+    }
+  }
+  .spinner-message {
+    position: relative;
+    top: 40%;
+    margin-left: auto;
+    margin-right: auto;
+    padding: 0.5em;
+    background-color: transparent;
+    border: 1px transparent solid;
+    display: inline-table;
+    border-collapse: separate;
+    border-radius: 0.25em;
+    /* this is fix for spinner overflow issue when height of the window is changed */
+    -webkit-transform: translate3d(0, 0, 0);
+
+
+    .spinner-messages, .spinner-text, .spinner-image {
+      vertical-align: middle;
+      display: table-cell;
+    }
+    .spinner-image {
+      font-size: 2em;
+      color: #212121;
+    }
+    .spinner-text {
+      text-align: left;
+      padding-left: 0.5em;
+    }
+  }
+}
+
+.infinite {
+  animation-iteration-count: infinite;
+}
+
+.app-content .app-spinner {
+   .spinner-message {
+     background-color: @wm-app-spinner-msg-bg-color;
+     border: 1px @wm-app-spinner-border-color solid;
+   }
+}
+
+/*overriding the position for the spinner in index.html*/
+.global-spinner, [classname=global-spinner] {
+  position: fixed;
+}
+
+//Popover styles
+.app-popover {
+  min-width: 50px;
+  min-height: 50px;
+  padding: 0;
+  .popover-start, .popover-end {
+    width: 0;
+    padding: 0;
+    height: 0;
+    border:0;
+    position:absolute;
+  }
+  .popover-content {
+    .width-height(100%, 100%);
+    overflow: auto;
+    padding: 0;
+    > div {
+      .width-height(100%, 100%);
+    }
+    .app-partial {
+      overflow: auto;
+      > button {
+        margin-top: 0.9em;
+      }
+    }
+  }
+
+  .popover-title ~ .popover-content {
+    .calc('height', ~"calc(100% - 3em)");
+  }
+
+  &.top,&.bottom{
+    &.bottom-right, &.top-right {
+      > .arrow {
+        left: auto !important;
+        right: 1em !important;
+      }
+    }
+  }
+}
+.app-popover-wrapper .disable-popover {
+    pointer-events: none;
+}
+
+/********************************************************************************
+*********************************Form Elements classes***************************
+*********************************************************************************/
+/** button class**/
+.app-button {
+  position: relative;
+  .btn-caption {
+    margin: 0 0.2em;
+    vertical-align: middle;
+    &:empty {
+      margin: 0;
+    }
+  }
+  //BADGE
+  .badge {
+    position: absolute;
+    top: 9pt;
+    right: 9pt;
+  }
+}
+
+.app-menu {
+  display: inline-block;
+  position: relative;
+  .app-button >.caret, .app-anchor >.caret {
+    border: none !important;
+    margin-top: 0.25em;
+    margin-right: 0.3em;
+    width: 6px;
+    position: relative;
+  }
+  .dropdown-toggle {
+    /**hiding the caret if there is only icon and no caption***/
+    .btn-caption:empty, .anchor-caption:empty {
+      + span.caret {
+        display: none;
+      }
+    }
+    .caption:empty + span + span.caret {
+      display: none;
+    }
+    &.btn {
+      white-space: normal;
+      text-align: inherit;
+    }
+  }
+  &.open {
+    .dropdown-menu {
+      &.horizontal {
+        display: table;
+      }
+    }
+  }
+  .dropdown-menu {
+    z-index: 1040 !important;
+    width: 100%;
+    padding: 0;
+    &.dropinline-menu {
+      position: relative;
+      float: none;
+      min-width: auto;
+      padding-top: 0 !important;
+      padding-bottom: 0 !important;
+      margin-bottom: 0 !important;
+      border-bottom-width: 0 !important;
+    }
+    &.horizontal {
+      padding-top: 0;
+      padding-bottom: 0;
+      &.pull-right {
+        left: -100%;
+      }
+      li {
+        display: table-cell;
+      }
+      //Sub menu position
+      .dropdown-submenu:hover, .dropdown-submenu.open {
+        > .dropdown-menu {
+          left: 0;
+          top: 100%;
+          display: table;
+          padding-top: 0;
+          padding-bottom: 0;
+          &.pull-right {
+            right: 0;
+            left: -100%;
+          }
+        }
+      }
+    }
+    &.icon-position-right {
+      li > a {
+        direction: rtl;
+        .app-icon {
+          margin: 0 0 0 0.5em;
+        }
+      }
+    }
+    &.icon-position-top {
+      li > a {
+        text-align: center;
+        .app-icon {
+          display: block;
+          margin: 0;
+        }
+        .caret {
+          margin-top: 0.75em;
+        }
+      }
+    }
+  }
+  ul > li > a {
+    cursor: pointer;
+    text-overflow: ellipsis;
+    overflow-x: hidden;
+    .fa {
+      margin-top: 0.25em;
+    }
+  }
+  ul > li > a > i {
+    margin-right: 8px;
+  }
+  .app-anchor {
+    text-decoration: none;
+  }
+  .dropdown-submenu {
+    position: relative;
+    a >.caret {
+      border: none;
+      margin-top: 0.25em;
+      margin-right: 0.3em;
+      width: 6px;
+      position: relative;
+    }
+  }
+  .dropdown-submenu:hover, .dropdown-submenu.open {
+    > .dropdown-menu{
+      &.pull-right{
+        float: right;
+        left: -100%;
+      }
+        display: block;
+        left:100%;
+        top: 0px;
+        margin-top: -2px;
+        margin-left: -2px;
+      &.dropinline-menu {
+        position: relative;
+        float: none;
+        left: 0;
+      }
+
+    }
+    &.pull-left{
+        > .dropdown-menu{
+            display: block;
+            left: -100%;
+            bottom: 0px;
+            margin-bottom: -2px;
+        }
+    }
+  }
+  &.dropup .dropdown-submenu:hover, &.dropup .dropdown-submenu.open{
+    > .dropdown-menu{
+        display: block;
+        left: 100%;
+        top : auto;
+        bottom: 0px;
+        margin-bottom: -2px;
+        margin-left: -2px;
+      &.pull-right{
+        float: right;
+        left: -100%;
+      }
+    }
+  }
+}
+
+.wm-app .popover.fade.in {
+  max-width : none;
+}
+
+.app-tree {
+  position: relative;
+  .user-select-none();
+  text-decoration: none;
+  overflow: auto;
+  ul {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    li {
+      position: relative;
+      margin-left: 1em;
+
+      &.leaf-node {
+        margin-left: 2.25em;
+      }
+
+      i {
+       margin-right: 0.25em;
+       font-size: 1em;
+      }
+
+      &.expanded {
+        > ul {
+          display: block;
+        }
+      }
+
+      &.collapsed {
+        > ul {
+          display: none;
+        }
+      }
+
+      &.selected {
+        > i, > span {
+          color: @app-grid-row-selected-color;
+        }
+      }
+
+      i, span {
+        cursor: pointer
+      }
+      span:hover {
+        color: @app-grid-row-selected-color;
+      }
+    }
+  }
+  > ul > li {
+    margin-left: 0;
+    &.leaf-node {
+      margin-left: 1.25em;
+    }
+  }
+}
+
+/**composite container**/
+.app-composite-widget {
+  position: relative;
+}
+
+
+/**  slider class  **/
+.app-slider {
+  width: auto;
+  position: relative;
+  .app-slider-value {
+    display:inline-block;
+    text-align:center;
+  }
+  output {
+    display: inline-block;
+  }
+  .range-input {
+    display: inline-block;
+  }
+
+/***slider customization***/
+
+  @wm-slider-track: #d5cebc;
+  @wm-slider-thumb: #5b89db;
+
+  input[type='range'], input[type='range']::-webkit-slider-runnable-track, input[type='range']::-webkit-slider-thumb {
+    -webkit-appearance: none;
+  }
+  input[type='range'] {
+    color: @wm-slider-thumb;
+    border: solid 0 transparent;
+    background-color: transparent;
+    border-width: 0 1em;
+    padding: 0;
+    width: 100%;
+    height: 2.5em;
+    opacity: .65;
+    cursor: pointer;
+
+    &:focus {
+      outline: none;
+      opacity: .99;
+    }
+    &::-webkit-slider-runnable-track {
+    position: relative;
+    height: 1.25em;
+    background: linear-gradient(@wm-slider-track, @wm-slider-track) no-repeat;
+    background-size: 100% 0.2em;
+    }
+
+    &::-webkit-slider-thumb {
+    position: relative;
+    margin-top: -0.6em;
+    border-radius: 50%;
+    background: currentColor;
+    width: 1.25em;
+    height: 1.25em;
+    }
+
+    /*firefox hack */
+    &::-moz-range-track {
+    height: 1.25em;
+    background: linear-gradient(@wm-slider-track, @wm-slider-track) no-repeat;
+    background-size: 100% 0.2em;
+    }
+
+    &::-moz-range-progress {
+    height: 1.25em;
+    box-shadow: inset 0 0.2em currentColor;
+    }
+    &::-moz-range-thumb {
+    border: none;
+    border-radius: 50%;
+    background: currentColor;
+    transform: translateY(-.58em);
+    width: 1.25em;
+    height: 1.25em;
+    }
+
+    /* ie 10+ hack */
+    &::-ms-track {
+    margin-left: 0.625em;
+    border: none;
+    height: 1.25em;
+    background: linear-gradient(@wm-slider-track, @wm-slider-track) no-repeat;
+    background-size: 100% 0.2em;
+    color: transparent;
+    }
+
+    &::-ms-fill-lower {
+    height: 1.25em;
+    box-shadow: inset 0 0.2em currentColor;
+    background: linear-gradient(transparent 0.125em, transparent 0.125em) no-repeat;
+    }
+
+    &::-ms-thumb {
+    border: none;
+    border-radius: 50%;
+    background: currentColor;
+    width: 1.25em;
+    height: 1.25em;
+    transform: translate(1px, -.58em);
+    }
+    &::-ms-tooltip {
+    display: none;
+    }
+  }
+}
+
+/*label*/
+@app-label-text-color: #333;
+@app-label-text-hover-color: #666;
+.app-label {
+  position: relative;
+  &.required:after {
+    content: "*";
+    color: @red;
+    margin-left: unit((@app-standard-size / 4) , px);
+  }
+}
+
+/*text field, text area, select box*/
+@app-input-bg-color: #FFFFFF;
+@app-input-border-color: #A3A3A3;
+@app-input-bg-gradient-start-color: #FFFFFF;
+@app-input-bg-gradient-end-color: #EAEAEA;
+.form-group {
+  /*supporting the old projects*/
+  .form-control-static {
+    + .app-chips .app-chip-search  {
+      width: 100%;
+    }
+    + .form-control, + wm-input > .form-control, + wm-textarea > .form-control, + wm-select > .form-control, + .app-input-wrapper > .form-control, +.form-control + .help-block, + .app-chip-search > .app-chip-input, + .input-group {
+      width: 75%;
+      margin: 0;
+    }
+  }
+}
+
+.app-textbox[type=number].step-hidden {
+  -moz-appearance:textfield;
+  &::-webkit-inner-spin-button, &::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+}
+
+.app-textbox, .app-textarea, .app-select {
+  max-width: 100%;
+  position: relative;
+/*Style for text-boxes with erroneous input*/
+  &.error {
+    border: 1px solid @red;
+  }
+}
+
+/*Style for select-locale widget*/
+.select-locale.form-control.app-select {
+  width: auto;
+}
+/*Editable field wrapper*/
+.app-select-wrapper, .app-input-wrapper {
+  display: inherit;
+}
+//Overriding input group styles for new structure on form-controls
+.wm-app .input-group  {
+  .app-select-wrapper, .app-input-wrapper {
+    display: table-cell;
+  }
+}
+
+.app-select option[disabled]:first-child {
+  display: none;
+}
+/*special case customization to show the first element of the select group which is disabled*/
+.custom-select-disable .app-select option[disabled]:first-child {
+  display: block;
+}
+.group-by-header() {
+  list-style: none;
+  background-color: rgba(0,0,0,0.1);
+  &.collapsible-content {
+    cursor: pointer;
+  }
+  h4 {
+    margin: 0;
+    padding-left: 1em;
+    padding-right: 1em;
+    line-height: 2.5em;
+    display: table;
+    width: 100%;
+    .header-action {
+      display: table-cell;
+      span, i{
+        float: right;
+      }
+      i {
+        padding: 0 10px 0 10px;
+      }
+    }
+  }
+}
+/**checkbox set**/
+.app-checkboxset, .app-radioset {
+  overflow: auto;
+  .app-list-item-group {
+    list-style-type: none;
+    .item-group {
+      padding-left: 0;
+    }
+    .list-group-header {
+      .group-by-header()
+    }
+  }
+  li {
+    label {
+      vertical-align: middle;
+    }
+    input[type="checkbox"], input[type="radio"] {
+      position: relative;
+      margin-right: .5em;
+    }
+  }
+  &.inline {
+    &.list-group {
+      display: block;
+    }
+    li {
+      display: inline-block;
+      &.app-list-item-group {
+        display: block;
+      }
+      &.list-group-header {
+        display: block;
+      }
+      margin-right: 1em;
+      * {
+        vertical-align: middle;
+      }
+      /**Override bootstrap styles when checkboxset & radioset are grouped***/
+      .checkbox+.checkbox, .radio+.radio {
+        margin-top: 10px;
+      }
+    }
+  }
+}
+
+/**checkbox **/
+.app-checkbox ,.app-checkboxset, .app-radioset, .app-radio, .app-anchor, .app-html-container, .app-currency, .app-textarea, .app-timeinput {
+  position: relative;
+  max-width: 100%;
+}
+/**Style for setting required * on checkbox label, when title is not given for form field**/
+[widget="checkbox"][required="required"]:not([displayname]){
+  .app-checkbox {
+    label.required:after {
+      content: "*";
+      color: @red;
+      margin-left: unit((@app-standard-size / 4) , px);
+    }
+  }
+}
+.app-anchor {
+  cursor: pointer;
+  display: inline-block;
+  //BADGE
+  .anchor-caption, .caption {
+    vertical-align: middle;
+    line-height: 1;
+  }
+  .badge {
+    position: absolute;
+    right: 2px;
+  }
+  .app-icon {
+    text-decoration: none;
+  }
+  &:hover, &:focus, .active {
+    .app-icon {
+      text-decoration: none;
+    }
+  }
+}
+
+.radio.app-radio, .app-checkbox.checkbox {
+  display: inline-block;
+  label {
+    .ellipsis(100%);
+    > * {
+      vertical-align: middle;
+    }
+    input:focus{
+      outline: 1px solid #1794ef !important;
+    }
+  }
+  .caption {
+    display: inline-block;
+    height: 100%;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+    max-width: 100%;
+  }
+}
+/****************************************Toggle classes******************************************/
+.app-toggle.checkbox {
+  label {
+    width: 60px;
+    height: 32px;
+    overflow: hidden;
+    box-shadow: inset 0 0 2px 1px rgba(0, 0, 0, 0.05);
+    border-radius: 500px;
+    position: relative;
+    background-color: #2ecc71;
+    border: 1px rgba(0, 0, 0, 0.2) solid;
+    &.unchecked {
+      background-color: #fff !important;
+    }
+    &.disabled {
+      opacity: 0.5;
+    }
+  }
+  input[type="checkbox"]{
+    position: absolute;
+    display: block;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    z-index: 6;
+    margin-top: 0 !important;
+  }
+  .caption {
+    visibility: hidden;
+  }
+  .switch {
+    position: absolute;
+    display: block;
+    left: 0;
+    top: 0;
+    background-color: #fff;
+    border-radius: 500px;
+    z-index: 1;
+    transition: 0.25s cubic-bezier(0.785, 0.135, 0.15, 0.86);
+    transition-property: left, right;
+    transition-delay: 0s, .08s;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+    text-align: center;
+    height: 100%;
+    border: 1px rgba(0, 0, 0, 0.1) solid;
+  }
+   input[type="checkbox"]:checked ~ .switch {
+      right: 0;
+      left: auto;
+      transition: 0.25s cubic-bezier(0.785, 0.135, 0.15, 0.86);
+      transition-property: left, right;
+      transition-delay: .08s, 0s;
+   }
+}
+.order-by {
+  li button{
+    padding: 0;
+  }
+  li span{
+    display: inline-block;
+    .ellipsis(70%);
+  }
+}
+/**app chips ***/
+.nav.app-chips  {
+  position: relative;
+  min-height: 20px;
+  > li {
+    position: relative;
+    margin: 2px 0;
+    &.disabled {
+      cursor: not-allowed;
+      pointer-events: none;
+    }
+    &.app-chip-search {
+      display: inline-block;
+      width: 180px;
+      &.full-width {
+        display: block;
+        width: 100%;
+        .app-chip-input {
+          width: 100% !important;
+        }
+      }
+      .app-chip-input {
+        border-color: transparent;
+        box-shadow: none;
+        background-color: transparent;
+        padding-top: 3px;
+        outline: 0;
+        float: left;
+        .app-textbox {
+          height: 28px;
+          padding: 4px 12px 8px;
+        }
+      }
+    }
+    &.chip-placeholder {
+      border : 2px dotted #ccc;
+      border-radius: 16px;
+      height: 31px;
+      width: 50px
+    }
+    .app-chip {
+      background-color: rgba(0, 0, 0, 0.1);
+      border-radius: 500px;
+      padding: 0.5em 1em;
+      color: inherit;
+      font-weight: bold;
+      height: 2.4em;
+      cursor: default;
+      .app-chip-title{
+        max-width: 100px;
+        text-overflow: ellipsis;
+        overflow: hidden;
+        white-space: nowrap;
+        display: inline-block;
+        vertical-align: top;
+      }
+      .btn {
+        color: inherit;
+        padding: 0;
+        padding-left: 0.4em;
+        opacity: 0.5;
+        margin-top: -5px;
+        cursor: pointer;
+        &:hover {
+          background-color: transparent !important;
+          opacity: 1;
+        }
+      }
+      &.chip-duplicate {
+        background-color: #F44336;
+        color: #fff;
+      }
+      &.chip-picture {
+        img {
+          width: 29px;
+          height: 29px;
+          margin-top: -5.5px;
+          margin-left: -12px;
+          border-radius: 16px;
+          margin-right: 6px;
+        }
+      }
+    }
+    .dropdown-menu {
+      font-size: 0.9em;
+      img {
+        .width-height(30px, 30px);
+        padding-right: 5px;
+      }
+    }
+  }
+}
+
+
+/**toggle-button**/
+.app-switch {
+  .model-holder {
+    width: 0;
+    height: 0;
+    position: absolute;
+    top: 23px;
+    left: 50%;
+    z-index: -1000;
+  }
+  position: relative;
+  display: inline-block;
+  border-radius: 500px;
+  background: #fff;
+  overflow: hidden;
+  transform: scale(1);/**fix for animated icons messing up with the switch widget style***/
+  .app-icon {
+    margin-right: 0.2em;
+  }
+  .btn-group {
+    position: relative;
+    overflow: hidden;
+    height: 100%;
+    > .btn {
+      border-radius: 500px;
+      height: 100%;
+    }
+  }
+
+  &[disabled] {
+    opacity: 0.65;
+    span.app-switch-overlay {
+      cursor: not-allowed;
+    }
+  }
+
+  span.app-switch-overlay {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: -100%;
+    z-index: 10;
+    pointer-events: none;
+    margin-left: 0;
+    pointer-events: inherit;
+    height: 100%;
+    vertical-align: middle;
+    border-radius: 0;
+  }
+}
+
+/**textarea class**/
+.app-textarea {
+  height: 100%;
+}
+.wm-app .form-control.app-textarea {
+  height: 5.5em;
+}
+
+.app-currency {
+  width: 100%;
+}
+
+/**time input**/
+.app-timeinput.input-group {
+  max-width: 13em;
+  position: relative;
+  .dropdown {
+    position: static;
+  }
+  .dropdown-menu {
+    width: auto;
+   text-align: center;
+    table {
+      display: inline-table;
+    }
+  }
+}
+
+.app-datetime.input-group {
+  max-width: 21em;
+  position: relative;
+  .dropdown {
+    position: static;
+  }
+  .dropdown-menu {
+    top: 100% !important;
+    text-align: center;
+    width: auto;
+    table {
+      display: inline-table;
+    }
+    li:last-child {
+      overflow: visible !important;
+    }
+    padding: 0.5em;
+  }
+  button.btn.btn-default.btn-date {
+    border-right: 0px white;
+  }
+  button.btn.btn-default.btn-time {
+    border-left: 0px white;
+  }
+}
+
+/**date input**/
+.app-date.input-group {
+  position: relative;
+  max-width: 13em;
+  .form-control.app-dateinput {
+    position: relative;
+  }
+  .dropdown-menu {
+     padding: 0.5em;
+     width: auto;
+    li:last-child {
+      overflow: visible !important;
+    }
+  }
+}
+.wm-app {
+  .app-datetime, .app-date {
+    .app-calendar-event {
+      .btn:after {
+        font-family: "FontAwesome";
+        font-size: 6px;
+        content: "\f111\00a0\f111\00a0\f111";
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        color: rgba(0,0,0,0.2);
+        text-align: center;
+        line-height: 2px;
+      }
+      &.one {
+        .btn:after {
+          content: "\f111";
+        }
+      }
+      &.two {
+        .btn:after {
+          content: "\f111\00a0\f111";
+        }
+      }
+    }
+    .uib-daypicker {
+      tbody{
+        .btn-default {
+          position: relative;
+          margin: 0;
+          &:after {
+            bottom: -1em;
+          }
+          &[disabled="disabled"] {
+            color:#aaaaaa;
+          }
+        }
+      }
+      table {
+        tbody {
+          tr.uib-weeks {
+            td:first-child {
+              width: auto;
+            }
+          }
+        }
+      }
+    }
+    tbody .btn.btn-default {
+      &:focus, &.active {
+        background-color: #bbb !important;
+        color: #333 !important;
+      }
+    }
+    .uib-button-bar  .btn:focus {
+      outline: 1px dotted !important;
+    }
+  }
+  .app-datetime, .app-date, .app-timeinput {
+    //Focus styles for Date,DateTime input group buttons
+    .input-group-btn {
+      vertical-align: top;
+      .app-icon {
+        padding: 0;
+      }
+      .btn:focus {
+        outline: 1px dotted !important;
+      }
+    }
+  }
+  .model-holder[bsdatepicker] {
+    visibility: hidden;
+    width: 0;
+    height: 0;
+    min-height: 35px;
+  }
+  .app-date, .app-calendar .well.well-sm {
+    tr:nth-child(2) th, .bs-datepicker-body thead tr th {
+      &:first-child {
+        padding-left: 20px;
+      }
+      &:last-child {
+        padding-right: 20px;
+      }
+    }
+    tr td {
+      &:first-child {
+        padding-left: 10px;
+      }
+      &:last-child {
+        padding-right: 10px;
+      }
+    }
+  }
+}
+//Bs datepicker
+bs-datepicker-container, bs-daterangepicker-container {
+  z-index: 1080;
+}
+.bs-datepicker {
+  button, input {
+    &:hover, &:focus, &:active  {
+      outline: none;
+    }
+  }
+  .is-other-month {
+    color: rgba(0, 0, 0, 0.25);
+  }
+}
+.bs-datepicker-head {
+  bs-datepicker-navigation-view {
+    height: 50px;
+    overflow:hidden;
+    display: block;
+    border-radius: 0;
+    text-align: center;
+  }
+  button {
+    border: 0;
+    background: transparent;
+    height: 100%;
+    padding: 10px;
+    &:hover {
+      background-color: rgba(0, 0, 0, 0.1);
+    }
+  }
+  .previous, .next {
+    padding: 0 25px;
+    vertical-align: middle;
+    span {
+      font-size: 25px;
+    }
+  }
+  .next {
+    float: right;
+  }
+  .previous {
+    float: left;
+  }
+  .current {
+    padding: 0 5px;
+    height: inherit;
+    vertical-align: middle;
+  }
+}
+.bs-datepicker-body {
+  background-color: #fff;
+  padding: 0 5px;
+  border-radius: 0 0 3px 3px;
+  min-height: 220px;
+  min-width: 230px;
+  border: 1px solid #e9edf0;
+  .days.weeks {
+    position: relative;
+    z-index: 1;
+  }
+  table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    th {
+      padding: 8px;
+    }
+    td {
+      color: #54708b;
+      text-align: center;
+      position: relative;
+      padding: 0;
+      &:before {
+        content: "";
+        display: block;
+        position: absolute;
+        z-index: -1;
+        top: 6px;
+        bottom: 6px;
+        left: -2px;
+        right: -2px;
+        box-sizing: content-box;
+        background: transparent;
+      }
+      span {
+        display: block;
+        margin: 0 auto;
+        font-size: 13px;
+        position: relative;
+        z-index: 1;
+        -moz-user-select: none;
+        -webkit-user-select: none;
+        -ms-user-select: none;
+        &:before {
+          content: "";
+          display: block;
+          position: absolute;
+          z-index: -1;
+          top: 6px;
+          bottom: 6px;
+          left: -2px;
+          right: -2px;
+          box-sizing: content-box;
+          background: transparent;
+        }
+        &.selected, &.selected span {
+          color: rgb(255, 255, 255);
+        }
+        &:focus {
+          background-color: #bbb;
+          color: #333;
+        }
+        &.disabled {
+          color: #ccc;
+          cursor: not-allowed;
+          &:focus {
+            color: #fff;
+          }
+        }
+        &:not(.is-other-month):not(.disabled):hover {
+          cursor: pointer;
+        }
+      }
+    }
+    &:not(.weeks) {
+      tr {
+        td {
+          &:first-child {
+            &:before {
+              border-radius: 3px 0 0 3px;
+            }
+          }
+        }
+      }
+    }
+    &.days {
+      span {
+        width: 32px;
+        height: 32px;
+        line-height: 32px;
+        border-radius: 50%;
+      }
+    }
+    &.months {
+      td {
+        height: 52px;
+        span {
+          padding: 6px;
+        }
+      }
+    }
+    &.years {
+      td {
+        span {
+          width: 46px;
+          height: 46px;
+          line-height: 45px;
+          margin: 0 auto;
+        }
+      }
+      tr {
+        &:not(:last-child) {
+          td {
+            span {
+              margin-bottom: 8px;
+            }
+          }
+        }
+      }
+    }
+  }
+}
+//Fallback styles for date picker
+.app-date {
+  .bs-datepicker-head {
+    background-color: #1d96f4;
+    color: #fff;
+  }
+  .bs-datepicker-body {
+    table {
+      td {
+        &.week, &.disabled {
+          span {
+            cursor: initial;
+            &:hover, &:focus {
+              background-color: transparent;
+              color: inherit;
+              cursor: initial;
+            }
+          }
+        }
+        span {
+          &.selected, &[class*="select-"]::after  {
+            background-color: #1d96f4;
+          }
+        }
+         &.selected span, &[class*="select-"] span::after {
+          background-color: #1d96f4;
+        }
+      }
+    }
+  }
+}
+.bs-datepicker-btns, .bs-datepicker-predefined-btns {
+  button {
+    &:hover, &:focus, &:active  {
+      outline: none;
+    }
+  }
+}
+/**input required**/
+.app-required-input {
+  color: @red;
+}
+
+/**Color picker classes**/
+.app-colorpicker.input-group {
+  width: 10em;
+  position: relative;
+  .input-group-addon {
+    width: 30px;
+    position: absolute;
+    right: 0;
+    height: 100%;
+    z-index: 3;
+    pointer-events: none;
+    padding: 0;
+    .colored-box {
+      width: 100%;
+      height: 100%;
+      display: inline-block;
+      background-color: #fff;
+    }
+  }
+  .dropdown {
+    position: absolute;
+    .dropdown-menu {
+      min-width: 129px;
+    }
+  }
+}
+
+/*readonly wrapper styles*/
+.readonly-wrapper {
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  cursor: not-allowed;
+  z-index: 1;
+}
+
+/********************************************************************************
+*********************************Dialog classes**********************************
+*********************************************************************************/
+/*Define dialog dimensions with specific values depending upon the size of the dialog*/
+@app-dialog-header-bg-gradient-start-color: #FEFEFE;
+@app-dialog-header-bg-gradient-end-color: #CCCCCC;
+@app-dialog-header-close-btn-bg-color: #CCCCCC;
+@app-dialog-body-bg-color: @white;
+@app-dialog-close-button-border-color: #999999;
+@app-dialog-close-box-shadow-color: #333333;
+/* giving absolute position to view*/
+.dialog-view {
+  .width-height();
+  position: absolute !important;
+  top: 0;
+  right: 0;
+  z-index: 100;
+}
+
+/**dialog header**/
+.app-dialog-header {
+  position: relative;
+  .wm-icon24 {
+    top: 5px;
+  }
+  .wms-delete-datamodel {
+    top : 0px;
+  }
+  .app-dialog-title .wi {
+    vertical-align: baseline;
+  }
+
+  .app-dialog-title .dialog-heading:before {
+    content: " ";
+  }
+}
+
+/**dialog body**/
+.app-dialog-body {
+  min-height: 100px;
+  position: relative;
+  &.noscroll {
+    overflow: inherit;
+  }
+  .app-content-column {
+    padding: 0;
+  }
+}
+
+/****page dialog classes****/
+.app-page-dialog {
+  .app-dialog-body {
+    .app-form {
+      border-color: transparent;
+    }
+  }
+}
+
+/****alert dialog classes****/
+.app-alert-dialog {
+  .app-dialog-message {
+    &.text-error {
+      color: @wm-app-msg-error-color;
+    }
+    &.text-information {
+      color: @wm-app-msg-info-color;
+    }
+    &.text-success {
+      color: @wm-app-msg-success-color;
+    }
+    &.text-warning {
+      color: @wm-app-msg-warning-color;
+    }
+  }
+}
+
+/****confirm dialog classes****/
+.app-confirm-dialog {
+  .app-dialog-message {
+    &.warning {
+      color: @red;
+      opacity: 0.8;
+    }
+  }
+}
+
+/**iframe dialog**/
+.app-iframe-dialog {
+  .app-dialog-body.modal-body {
+    padding: 0;
+    .app-iframe iframe {
+      height: 100%;
+      width: 100%;
+      border: 0;
+    }
+  }
+}
+
+/**login dialog widget **/
+.app-login-dialog {
+  .app-dialog-body {
+    .app-login-dialog-message {
+      padding: 8px;
+      margin-bottom: 8px;
+    }
+    .app-form {
+      box-shadow: none;
+      .panel-body {
+        padding: 0;
+      }
+    }
+  }
+}
+
+/**dialog footer**/
+.app-dialog-footer {
+  position: relative;
+}
+
+.app-dialog {
+  position: relative;
+/******handling the forms in the dialog without the border*******/
+  .app-dialog-form {
+    box-shadow: none;
+    border-color: transparent;
+    .panel-body {
+      padding: 0;
+    }
+  }
+  .app-form {
+    box-shadow: none !important;
+    border-color: transparent;
+    margin-bottom: 0;
+  }
+}
+
+/*Basic Styles for Dialog Widget*/
+
+/*overriding bootstrap styles to avoid UI flicker on dialog open.*/
+body.modal-open {
+  margin-right: 0;
+  overflow: hidden;
+  .modal {
+    overflow-y: auto;
+    // TODO: Temporary fix for 'Rendering issue in modals with Chrome 70 update'. Remove after chrome 72 update.
+    will-change: transform;
+  }
+}
+.modal-backdrop {
+  height: 100%;
+  bottom: 0;
+  position: fixed !important;
+}
+/********************************************************************************
+*********************************File upload classes*****************************
+*********************************************************************************/
+/*File upload widget variables */
+@app-fileupload-border-color: rgba(0, 0, 0, 0.05);
+@app-fileupload-dropbox-bg-color: rgba(0,0,0,0.05);
+@app-fileupload-hover-color: rgba(0,0,0,0.2);
+
+.app-fileupload {
+  overflow: hidden;
+  position: relative;
+  margin: 0 0 @app-standard-margin 0;
+  &[disabled="disabled"] {
+    .app-multi-file-upload, .app-single-file-upload {
+      .caption, .form-horizontal .file-input, .drop-box {
+        cursor: not-allowed;
+      }
+      .app-button-wrapper {
+        .app-button {
+          opacity: 0.65;
+        }
+      }
+    }
+  }
+/**single file upload classes**/
+  .app-single-file-upload, .app-multi-file-upload {
+    position: relative;
+    min-height: 3em;
+    height: auto;
+    .app-button-wrapper {
+      position: relative;
+      display: inline-block;
+      margin-right: 4px;
+    }
+  }
+
+/*file upload styles*/
+  .file-upload {
+    width: 100%;
+    overflow-y: auto;
+    .file-upload-status {
+      .upload-file-list {
+        .file-icon {
+          font-size: 1.5em;
+        }
+        .file-upload-stop {
+          margin-top: 30px;
+        }
+        .media-right {
+          a i, span {
+            font-size: 1.5em;
+            text-decoration: none;
+            color: inherit;
+          }
+        }
+        .file-details {
+          .file-detail {
+            .uploaddetails {
+              margin: 0;
+              .filesize, .upload-title {
+                vertical-align: middle;
+                margin: 0 5pt;
+              }
+              .upload-title {
+                height : 1.3em;
+                text-overflow: ellipsis;
+                overflow: hidden;
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+  .form-horizontal {
+    position: relative;
+    .file-input {
+      position: absolute;
+      opacity: 0;
+      z-index: 2;
+      cursor: pointer;
+      width: 100%;
+      height: 100%;
+    }
+  }
+
+
+/**  multiple file upload classes**/
+  .app-multi-file-upload {
+
+    .width-height();
+    .status {
+      border-bottom: 1px @app-fileupload-border-color solid;
+    }
+    .icon {
+      font-size: 2em;
+    }
+  /* style for the drop box*/
+    .drop-box {
+      border: 1px dashed @app-fileupload-border-color;
+      background-color: @app-fileupload-dropbox-bg-color;
+      vertical-align: middle;
+      text-align: center;
+    /* style when try to drag the file in drop box*/
+      &.file-dragover {
+        background-color: @app-fileupload-hover-color;
+        color: #fff;
+      }
+    }
+    .app-anchor {
+      color: inherit;
+    }
+  }
+}
+
+/********************************************************************************
+********************************* List classes *****************************
+*********************************************************************************/
+.app-list, .app-livelist {
+  position: relative;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  min-height: 2em;
+  &.inline {
+    .app-list-item {
+      display: inline-block;
+    }
+  }
+  &.Inline {
+    > .panel-heading {
+      display: table-caption;
+      background-color: inherit;
+    }
+  }
+  > ul {
+    display: block;
+    padding-bottom: 1px; //Fix for unnecessary vertical scrollbar on the list
+  }
+  ul.list-group {
+    margin-bottom: 0;
+  }
+  li.app-list-item-group {
+    list-style: none;
+  }
+  li.app-list-item-header {
+    .group-by-header();
+  }
+  .app-list-item {
+    position: relative;
+    list-style: none;
+    outline: none;
+    .app-list-item-value {
+     word-break: break-word;
+    }
+    &.active {
+      z-index: auto !important;/***fix for popover in the list item getting hidden***/
+      &.list-group-item {
+        .app-label, .app-anchor {
+          color: inherit;
+        }
+        .app-label, .app-icon {
+          opacity: .9;
+        }
+        .text-muted {
+          opacity: 0.7;
+        }
+        .app-panel, .app-card, .app-tabs .tab-content, .ta-editor {
+          color: #333;
+        }
+        .app-panel, .app-card {
+          &:not(.panel) {
+            .panel-heading {
+              color: #fff;
+            }
+          }
+        }
+      }
+    }
+   }
+  .app-picture {
+    text-align: center;
+  }
+}
+.app-livelist {
+  li.app-list-item {
+    display: inline-block;
+    float: none;
+    vertical-align: top;
+    > .app-card {
+      height: 100%;
+    }
+    &.active > .app-card {
+      border: 1px solid rgba(168,168,168,.9);
+    }
+    //Add overlay when disableitem is enabled
+    &.disable-item {
+      &:before {
+        content: '';
+        width: 100%;
+        height: 100%;
+        position: absolute;
+        left: 0;
+        right: 0;
+        top: 0;
+        bottom: 0;
+        z-index: 999;
+      }
+    }
+    &:focus:not(.active):not(.disable-item) {
+      background-color: rgba(0,0,0,0.05);
+    }
+  }
+
+  /*for inline styles: start*/
+  > nav.app-datanavigator {
+    display: table-cell;
+    vertical-align: middle;
+    width: 40pt;
+    padding: 5pt;
+  }
+  &.Inline {
+    display: table;
+    table-layout: fixed;
+    width: 100%;
+    .app-livelist-container {
+      padding: 0;
+      .app-list-item {
+        display: inline-block;
+      }
+    }
+    .app-list-item-group {
+      display: inline-block;
+    }
+    .app-datanavigator {
+      overflow: hidden;
+    }
+  }
+  .app-datanavigator + .app-livelist-container {
+    vertical-align: middle;
+    white-space: nowrap;
+    overflow-x: auto;
+    overflow-y: hidden !important;
+    .app-list-item {
+      white-space: normal;
+      float: none;
+    }
+  /*for inline styles: end*/
+    .app-list-item-group {
+        ul.list-group {
+          display: inline-table;
+          > li {
+            display: inline-block;
+            vertical-align: middle;
+          }
+          .app-list-item-header {
+            display: table-cell;
+            text-align: center;
+            width: 10%;
+            white-space: normal;
+          }
+        }
+    }
+
+  }
+  ul {
+    position: relative;
+  }
+  .app-label {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    word-break: break-word;
+  }
+  .media {
+    margin-top: 0;
+    .img-thumbnail {
+      max-width: none;
+    }
+  }
+  .media-right {
+    padding-left: 0 !important;
+    a, a:hover, a:focus {
+      text-decoration: none;
+      i {
+        font-size: 18pt;
+        color: inherit;
+      }
+    }
+    ul.dropdown-menu a i {
+      font-size: inherit;
+    }
+  }
+  .thumbnail{
+    margin-bottom: 0;
+    text-align: center;
+    .caption{
+      .detail {
+        font-weight: normal;
+      }
+    }
+  }
+  .no-data-msg, .loading-data-msg {
+    text-align: center;
+  }
+
+  .loading-data-msg {
+    .app-icon {
+      font-size: 16pt;
+    }
+    .loading-text {
+      vertical-align: top;
+      padding-left: 10px;
+    }
+  }
+
+  &:not(.On-Demand):not(.Scroll) {
+    .loading-data-msg {
+      position: absolute;
+      top: 0;
+      bottom: 5.3em;
+      width: 100%;
+      background: rgba(200, 200, 200, 0.55);
+      > span {
+        position: absolute;
+        top: 50%;
+        left: 0;
+        width: 100%;
+      }
+    }
+    &.None .loading-data-msg {
+      bottom: 0;
+    }
+    &.Inline {
+      .loading-data-msg {
+        left: 0;
+        bottom: 0;
+        z-index: 1;
+      }
+    }
+  }
+  &.On-Demand, &.Scroll {
+    .loading-data-msg {
+      height: 4em;
+      display: table;
+      width: 100%;
+      > span {
+        display: table-cell;
+        height: 100%;
+        vertical-align: middle;
+      }
+    }
+  }
+  &.On-Demand {
+    .panel-footer {
+      padding: 0;
+    }
+  }
+}
+.app-iframe {
+  position: relative;
+  iframe {
+    width: 100%;
+    height: 100%;
+  }
+}
+
+/********************************************************************************
+********************************* App message classes *****************************
+*********************************************************************************/
+.app-message {
+  position: relative;
+  &.alert {
+    word-break: break-word;
+    div {
+      padding: 0 5px;
+      box-sizing: border-box;
+      vertical-align:top;
+      display: inline-block;
+    }
+    div:nth-child(1), div:nth-child(3) {
+      width: 20px;
+    }
+    div:nth-child(2) {
+      .calc('width', ~"calc(100% - 60px)");
+    }
+  }
+  .icon {
+    display: inline-block;
+    font-size: 11px;
+    margin-right: 5px;
+  }
+  span {
+    vertical-align: text-top;
+  }
+  .close {
+    position: absolute;
+    top: 1px;
+    right: 4px;
+  }
+}
+
+/********************************************************************************
+********************************* Image classes *****************************
+*********************************************************************************/
+.app-picture {
+  display: inline-block;
+  text-align: center;
+  vertical-align: middle;
+  position: relative;
+  cursor: default;
+  width: auto;
+  height: auto;
+}
+/********************************************************************************
+********************************* Video classes *****************************
+*********************************************************************************/
+.app-video {
+  position: relative;
+/*Default width and height for video are 300 and 150.
+If the height and width are not specified the video takes the height of the poster*/
+  height: 150px;
+  width: 300px;
+  display: inline-block;
+  > video {
+    height: 100%;
+    width: 100%;
+  }
+}
+.app-audio {
+  position: relative;
+  display: inline-block;
+  width: 300px;
+  > audio {
+    width: 100%;
+  }
+}
+/********************************************************************************
+********************************* prefab style classes *****************************
+*********************************************************************************/
+.app-prefab {
+  min-height: 1em;
+  position: relative;
+  //View inside prefab should have lower z-index
+  .app-view {
+    z-index: 1000;
+  }
+  .app-page .app-content {
+    background-color: transparent;
+  }
+}
+
+/* class used to adjust height of container for prefab project in run mode */
+.app-prefab-run {
+  height: 100%;
+  min-height: 500px;
+}
+/********************************************************************************
+*********************************Data Navigator classes **********************************
+*********************************************************************************/
+
+.app-datanavigator {
+  position: relative;
+  overflow-y: auto;
+
+  ul.pagination, ul.pager, .pagination {
+    margin : 0;
+    & > li.pagecount > a {
+      width: 4em;
+      padding-left: 0;
+      padding-right: 0;
+      height: 100%;
+      &.ng-invalid {
+        margin-right: 1px;
+        border-color: @red;
+      }
+      .form-control {
+        height: auto;
+        border: none;
+        box-shadow: none;
+        padding: 0 2px;
+        font-size: inherit !important;
+        background-color: transparent;
+        line-height: inherit;
+      }
+    }
+    & > li.totalcount.basiccount > a {
+      border-left: 0;
+    }
+  }
+  ul.pager {
+    display: inline-block;
+    &.pager-sm {
+      zoom: 80%;
+    }
+  }
+  ul.pagination, .pagination {
+    &.basic {
+      &.pagination-sm {
+        .pagination-prev, .pagination-next, .pagination-first, .pagination-last {
+          a:before {
+            font-size: 11pt;
+          }
+        }
+      }
+      > li {
+        > a {
+          color: inherit;
+          background-color: transparent;
+          border-width: 0;
+          text-align: center;
+        }
+        &.active, &:hover, &:focus{
+          > a {
+            color: inherit;
+            background-color: transparent;
+            border-bottom-width: 3px;
+            &:hover {
+              background-color: transparent;
+              border-bottom-width: 3px;
+              color: inherit;
+              font-weight: bold;
+            }
+          }
+        }
+        //IE11 issue with navigation on pseudo classes
+        &.disabled a {
+          &[disabled] {
+            pointer-events: none;
+            display: inline-block;
+            padding-left: 0;
+            padding-right: 0;
+            text-align: center;
+            &:before {
+              display: inline-block;
+            }
+          }
+        }
+      }
+      .pagination-prev, .pagination-next, .pagination-first, .pagination-last {
+        a {
+          padding: 0;
+          font-size: 0;
+          display: inline-table; //Removes the conflicts in alignment for old projects
+        }
+        a:before {
+          font-family: "wavicon";
+          font-size: 16pt;
+          vertical-align: initial;
+          width: 16pt;
+          height: 16pt;
+          position: relative;
+        }
+      }
+      .pagination-prev a:before {
+        content: "\f1d1";
+      }
+      .pagination-next a:before {
+        content: "\f1d2";
+      }
+      .pagination-first a:before {
+        content: "\f288";
+      }
+      .pagination-last a:before {
+        content: "\f322";
+      }
+    }
+    &.active {
+      background-color: transparent;
+      border-bottom-width: 2px;
+    }
+  }
+  li {
+    &.totalcount.basiccount {
+      > a , a:hover{
+        color: inherit;
+        background-color: transparent;
+        border-width: 0;
+      }
+    }
+  }
+  &[navigation="Pager"] {
+    overflow: hidden;
+  }
+}
+/********************************************************************************
+*********************************Grid classes **********************************
+*********************************************************************************/
+/*GridForm*/
+@app-disabled-text-color: #AAAAAA;
+@app-grid-border-color: #D4D4D4;
+@app-grid-header-border-color: #B9B9B9;
+@app-grid-row-selected-color: #E2F7FF;
+@app-grid-column-selected-color: #A0CBD4;
+
+.app-grid {
+  position: relative;
+  height: auto;
+  display: table;
+  table-layout: fixed;
+  width: 100%;
+  .form-search {
+    padding: 1em;
+    .app-search-button {
+      .remove-background();
+      border: none;
+      box-shadow: none;
+      color: inherit;
+      padding: 0;
+      &:focus,&:hover {
+        .remove-background();
+        outline: none;
+      }
+    }
+    .app-select {
+      width: auto;
+    }
+  }
+  &[spacing="condensed"] {
+    .app-datagrid-actions .app-anchor {
+      font-size: 13px;
+    }
+  }
+  .app-datagrid-actions {
+    text-align: right;
+    display: table-cell;
+    vertical-align: top;
+    .app-anchor {
+      font-size: 15px;
+      .app-icon, .anchor-caption {
+        vertical-align: baseline;
+      }
+    }
+    > .btn, .app-anchor {
+      margin: 0.33em;
+      &.disabled-new {
+        pointer-events: none;
+        opacity: 0.65;
+      }
+    }
+  }
+  > .panel-heading {
+    > .panel-actions {
+      &.panel-actions {
+        position: relative;
+        top: 0;
+      }
+      .app-menu.dropdown {
+        .btn.app-button .caret {
+          display: inline-block;
+        }
+      }
+    }
+  }
+  > .panel-footer {
+    display: table;
+    width: 100%;
+    border-collapse: initial;
+    // Fix for height of input box in pagination.
+    .app-datagrid-paginator  {
+      .app-datanavigator a:focus {
+        box-shadow: inset 0px 0px 0px 1px #1794ef;
+        -ms-box-shadow: inset 0px 0px 0px 1px #1794ef;
+      }
+    }
+  }
+  .app-datagrid {
+    position: relative;
+    padding: 0;
+    .sort-buttons-container {
+      position: absolute;
+      float: right;
+      right: 0;
+      bottom: 0.8em;
+    }
+    .table-container {
+      position: relative;
+      overflow: hidden;
+      width: 100%;
+      &.show-msg {
+        pointer-events: none;
+        .overlay {
+          position: relative;
+        }
+        .app-grid-content {
+          display: none;
+        }
+        .filter-row {
+          pointer-events: all;
+        }
+      }
+      .filter-row .input-group {
+        .app-checkbox {
+          margin: 0;
+        }
+        .input-group-addon {
+          .app-icon {
+            font-size: 1.2em;
+          }
+          padding-right: 0.3em;
+          padding-left: 0.3em;
+        }
+        .input-group-btn:last-child > .btn {
+          z-index: 0;
+        }
+        &.input-group-sm .input-group-btn {
+          padding: 0;
+        }
+        .app-datetime, .app-date, .app-timeinput {
+          max-width: inherit;
+          width: 100%;
+        }
+      }
+      .app-checkbox {
+        margin: 0;
+        .caption {
+          margin: 0;
+          vertical-align: inherit;
+        }
+      }
+      .table-striped.table-row-expansion > tbody > {
+        tr:nth-of-type(odd) {
+          background-color: inherit;
+        }
+        tr:nth-of-type(4n-2), tr:nth-of-type(4n-3) {
+          background-color:  rgba(162, 162, 162, 0.06) ;
+        }
+      }
+    }
+    .app-datagrid-cell {
+      img {
+        max-width: 100%;
+      }
+      .app-datetime, .app-date, .app-timeinput, .file-upload {
+        width: 100%;
+      }
+      &.datetime-wrapper {
+        overflow-x: hidden;
+      }
+      &.cell-editing {
+        vertical-align: middle;
+        .app-select-wrapper, .app-input-wrapper {
+          display: block;
+        }
+        &:not(.checkbox-widget) {
+          padding: 0;
+          .uib-timepicker input {
+            border: 1px solid #e0e0e0;
+          }
+          form {
+            margin: 7px 0 0 0;
+          }
+        }
+        .wi-error {
+          position: absolute;
+          .calc('top', ~"calc(50% - 8px)");
+          right: 0;
+          font-size: 16px;
+          cursor: pointer;
+          z-index: 3;//setting higher than that of form-control's
+        }
+      }
+      &.required-field:before {
+        content: '*';
+        position: absolute;
+        top: 4px;
+        left: 0;
+        color: @red;
+        line-height: 0;
+        padding-top: 5px;
+        padding-left: 5px;
+        z-index: 10;
+        font-size: 16px;
+      }
+      .row-action.disabled-action {
+        opacity: 0.4;
+        pointer-events: none;
+      }
+    }
+    .grid-col-small {
+      width: 2.5em;
+    }
+    .app-grid-header {
+      .app-grid-header-inner {
+        overflow: hidden;
+        width: 100%;
+        height: 100%;
+        th {
+          &.app-datagrid-header-cell {
+            &[data-col-sortable] {
+              cursor: pointer;
+              .header-data {
+                cursor: pointer;
+              }
+            }
+            &[data-col-selectable] {
+              cursor: default;
+            }
+          }
+          &.app-datagrid-group-header-cell[colspan='0'] {
+              display: none;
+          }
+        }
+        .table-condensed {
+          .sort-buttons-container {
+            bottom: 0.2em;
+          }
+          .form-control, .input-group-btn .btn {
+            height: 26px;
+            padding: 2px 4px;
+          }
+          .input-group.date {
+            .model-holder[bsdatepicker] {
+              min-height: auto;
+            }
+          }
+        }
+      }
+      &.scroll-visible {
+        padding-right: 17px;
+      }
+      /*Edge has scroll width of 12px*/
+      @supports (-ms-ime-align: auto) {
+        &.scroll-visible {
+          padding-right: 12px;
+        }
+      }
+    }
+
+    .app-grid-content {
+      overflow: auto;
+      width: 100%;
+      height: 100%;
+    }
+    .app-datagrid-body {
+      > tr {
+        > td {
+          .row-action-button {
+            i {
+              padding: 5px 0;
+            }
+            &:focus {
+              opacity: .9;
+              color: #333;
+              background-color: rgba(168,168,168,.3) !important;
+            }
+          }
+          .row-expansion-button.btn {
+            &:focus {
+              background-color: rgba(168,168,168,.3) !important;
+            }
+          }
+        }
+        &:focus {
+          > td {
+            background-color: rgba(168,168,168,.3);
+          }
+        }
+      }
+    }
+  }
+  .table {
+    table-layout: fixed;
+    margin-bottom: 0 !important;
+    min-width: 100%;
+    thead th {
+      position: relative;
+      text-overflow: ellipsis;
+      overflow: hidden;
+      background-clip: padding-box;
+      .ui-resizable-handle {
+        right: -1px;
+        width: 4px;
+        pointer-events: all;
+      }
+      &.selected-column {
+        background-color: @app-grid-column-selected-color;
+      }
+    }
+
+
+    tbody {
+      tr {
+        &.active {
+          > td, > th {
+            background-color: @app-grid-row-selected-color;
+          }
+        }
+        td {
+          .actions-column {
+            white-space: nowrap;
+          }
+          text-overflow: ellipsis;
+          overflow: hidden;
+          position: relative;
+          .row-action-button {
+            &.btn-transparent {
+              opacity: 0.5;
+              font-size: 12pt;
+              padding: 0 5px;
+              &:hover {
+               opacity: 1;
+              }
+            }
+            i {
+              font-size: inherit;
+            }
+          }
+          &.selected-column {
+            background-color: @app-grid-column-selected-color;
+          }
+        }
+      }
+    }
+  }
+  .no-data {
+    position: absolute;
+    z-index: 100;
+    left: 40%;
+    top: 6em;
+  }
+
+
+  .editable-template {
+    width: 90%;
+  }
+
+
+  .app-spinner .spinner-message {
+    width: 48px;
+    height: 48px;
+    margin-left: -24px;
+    margin-top: -24px;
+    .spinner-image {
+      width: 48px;
+      height: 48px;
+      background-size: 100% 100%;
+    }
+    .spinner-text {
+      font-size: 12px;
+    }
+  }
+
+  .no-wrap {
+    white-space: nowrap;
+  }
+  .overlay {
+    width:100%;
+    height:100%;
+    position:absolute;
+    top: 0;
+    z-index: 999;
+    background: rgba(255, 255, 255, 0.5);
+    text-align: center;
+    padding: 1em;
+    .loading {
+      display: inline-block;
+      .width-height(16px, 16px);
+      .background-image('spinner-small.gif', no-repeat, center, center);
+      vertical-align: middle;
+      position: relative;
+      top: 50%;
+    }
+    .status {
+      display: inline-block;
+      position: relative;
+      top: 50%;
+    }
+  }
+  .row-overlay {
+    min-height: 200px;
+    .row-status {
+      position: absolute;
+      top: 43%;
+      left: 48%;
+    }
+  }
+}
+
+/*Live forms styles */
+//Live forms global padding
+
+.wm-app {
+  .app-form, .app-liveform, .app-livefilter {
+     .panel-body {
+        padding: 12px;
+     }
+  }
+}
+
+/********************************************************************************
+*********************************Navigation Popover classes **********************************
+*********************************************************************************/
+/*Navigation popover styles */
+
+.wm-app {
+    .nav {
+       > li {
+          .app-popover-wrapper a {
+            position: relative;
+            display: block;
+            padding: 8px 12px;
+            &:hover,
+            &:focus {
+               text-decoration: none;
+            }
+          }
+          &.disabled {
+             .app-popover-wrapper a {
+                &:hover,
+                &:focus {
+                  text-decoration: none;
+                }
+             }
+          }
+       }
+    }
+
+    .navbar-nav {
+      > li {
+        .app-popover-wrapper a {
+            padding-top: 10px;
+            padding-bottom: 10px;
+            line-height: 17px;
+        }
+      }
+    }
+
+    //Nav pills
+    .nav-pills {
+      > li.active {
+        .app-popover-wrapper {
+           a, a:hover, a:focus {
+              color: #fff;
+              background-color: #5b89db;
+           }
+
+        }
+      }
+    }
+}
+
+@media (min-width: 768px) {
+  .wm-app .navbar-nav {
+    > li {
+        .app-popover-wrapper a {
+           padding-top: 16.5px;
+           padding-bottom: 16.5px;
+        }
+    }
+  }
+}
+
+// Fix for height of input box in pagination.
+.app-datagrid-paginator  {
+  display: table-cell;
+  vertical-align: top;
+  .pagination-sm {
+    li {
+      a {
+        padding-top: 6px;
+      }
+    }
+  }
+}
+
+.wm-app .dropdown-menu.matchmode-dropdown {
+  z-index: 2000;
+  max-height: 300px;
+  overflow-y: auto;
+}
+//Styles for danger background in grid
+.wm-app .app-grid {
+  .table, .table-hover {
+    > thead, >tbody, >tfoot {
+      >tr {
+        > td.danger, &.danger > td, &.danger:hover > td {
+          background-color: #ffd3d3;
+          color: #333;
+        }
+      }
+    }
+  }
+}
+.app-livegrid {
+  position: relative;
+  height: auto;
+
+  .app-dialog {
+    width: auto !important;
+  }
+}
+
+
+
+
+/********************************************************************************
+*********************************Rich-text-editor classes **********************************
+*********************************************************************************/
+.app-richtexteditor {
+  position: relative;
+  overflow: auto;
+
+  .note-editable {
+    border: none;
+  }
+  .note-dropdown-menu {
+    padding: 0;
+    > a {
+      padding: 2px 10px;
+      &:hover {
+        text-decoration: none;
+      }
+    }
+  }
+  .locked.note-statusbar {
+    display: none;
+  }
+  .note-status-output:empty {
+    padding: 0;
+  }
+}
+//Richtexteditor modals
+  .note-modal {
+    .note-modal-header {
+      padding: 1em;
+      .note-modal-title {
+        margin: 0;
+      }
+    }
+    .note-modal-body {
+      padding: 10px;
+      label {
+        color: inherit;
+      }
+    }
+    .note-modal-footer {
+      height: auto;
+      text-align: right;
+      > button {
+        float: none;
+      }
+    }
+  }
+    /********************************************************************************
+    ******************************** Media List classes ******************************
+    *********************************************************************************/
+    @app-media-full-screen-info-panel-bg-color: rgba(74, 75, 76, 0.38);
+    @app-media-full-screen-nav-control-bg-color: rgba(74, 75, 76, 0.38);
+    @app-media-full-screen-nav-control-bg-color-on-hover: rgba(0, 0, 0, 0.5);
+    @app-media-full-screen-modal-bg-color: #000;
+    .app-medialist {
+      overflow: auto;
+      .thumbnail {
+        .width-height();
+        text-align: center;
+        position: relative;
+
+        .thumbnail-image {
+          max-width: 100%;
+          width: auto;
+          height: 100%;
+        }
+
+        .thumbnail-image-template {
+          max-width: 100%;
+          width: 100%;
+          height: 100%;
+        }
+
+        .thumbnail-details {
+          position: absolute;
+          .width-height();
+          top: 0;
+          text-align: left;
+        }
+      }
+
+      .app-media-item {
+        text-align: left;
+        position: relative;
+      }
+
+      &.singlerow {
+        white-space: nowrap;
+      }
+      .app-media-thumbnail {
+        z-index: 100;
+      }
+    }
+    .app-medialist,.wm-mobile-app {
+      .app-media-fullscreen {
+        z-index: 1000;
+        position: fixed;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        left: 0;
+        .app-mobile-navbar .left-nav-btn{
+          display: none;
+        }
+        .app-header+.app-content{
+          margin: 0;
+          .calc('height', ~"calc(100% - 36pt)");
+        }
+        .media-content{
+          display: table;
+          width: 100%;
+          height: 100%;
+        }
+        .image-container {
+          display: table-cell;
+          vertical-align: middle;
+          text-align: center;
+        }
+        .app-media-fullscreen-info-panel {
+          position: absolute;
+          top: 0;
+          font-size: 1.5em;
+          color: #fff;
+          text-align: center;
+          width: 100%;
+          padding: 10px;
+          background-color: @app-media-full-screen-info-panel-bg-color;
+
+          .back-btn{
+            font-size: 2em;
+          }
+        }
+        .app-media-fullscreen-nav-control {
+          position: absolute;
+          top: 50%;
+          background-color: @app-media-full-screen-nav-control-bg-color;
+          border-radius: 20pt;
+          margin: -15pt 10pt 0 10pt;
+          color: #fff;
+          font-size: 18pt;
+          width: 30pt;
+          height: 30pt;
+          text-align: center;
+
+
+          &:hover{
+            background-color: @app-media-full-screen-nav-control-bg-color-on-hover;
+          }
+
+          &.left{
+            left: 0;
+          }
+          &.right{
+            right: 0;
+          }
+          i {
+            &.wi{
+              text-decoration: none;
+            }
+          }
+        }
+      }
+    }
+    /********************************************************************************
+    ******************************** Tile classes ******************************
+    *********************************************************************************/
+
+    .app-tile {
+      padding : 1em;
+      margin  : 0;
+      position : relative;
+      display: inline-block;
+      width: 100%;
+      overflow: hidden;
+    }
+    /********************************************************************************
+    ******************************** Accordion classes ******************************
+    *********************************************************************************/
+    @app-accordion-panel-heading-bg-color: #d2d2d2;
+    @app-accordion-bg-gradient-start-color: #eeeeee;
+    @app-accordion-bg-gradient-end-color: #dedede;
+    @app-accordion-panel-heading-border-color: #b2b2b2;
+    @app-accordion-panel-collapse-bg-color: #fff;
+    @app-accordion-panel-collapse-border-color: #CCCCCC;
+    @app-accordion-panel-title-heading-color: #444444;
+    @app-accordion-heading-text-shadow-color: #ffffff;
+
+    .app-accordion {
+      margin-bottom: 0;
+      position: relative;
+      .panel + .panel {
+        margin: 0;
+      }
+      .app-accordion-panel {
+        position: relative;
+        .panel-collapse {
+          position: relative;
+        }
+        .panel-body {
+          position: relative;
+        }
+        > .panel-heading {
+          width: 100%;
+          position: relative;
+          cursor: pointer;
+          .panel-title {
+            > a {
+              text-decoration: none;
+            }
+            .panel-icon {
+              margin-right: 0.5em;
+            }
+          }
+          > .panel-actions {
+            float: right;
+            right: 0.25em;
+            top: 0.9em;
+            position: absolute;
+            margin-right: 0.2em;
+            .panel-action {
+              background: transparent;
+              box-shadow: none;
+              border: none;
+              padding: 0;
+              margin-right: 0.25em;
+              outline: none;
+            }
+            .label {
+              margin-right: 0.25em;
+            }
+          }
+        }
+      }
+    }
+
+    /********************************************************************************
+    ******************************** Tabs classes ******************************
+    *********************************************************************************/
+    @app-tabs-border-color: rgba(0,0,0,0.1);
+    @app-tabs-bg-color: #FFFFFF;
+    @app-tabs-border-colored: #c7c7c7;
+
+    .app-tabs {
+      &:focus {
+        outline: none;
+      }
+      &.has-transition {
+        > .tab-content {
+          overflow: hidden;
+          white-space: nowrap;
+          position: relative;
+          > .tab-pane {
+            vertical-align: top;
+            display: inline-block;
+            width: 100%;
+            visibility: visible;
+            &.active {
+              display: inline-block;
+            }
+            &::before, &::after {
+              display: inline;
+              font-size: 0;
+              content: '';
+            }
+          }
+          -webkit-transition: -webkit-transform 0.4s ease-out;
+          transition: transform 0.4s ease-out;
+        }
+      }
+      position: relative;
+      width: 100%;
+      display: table;
+      table-layout: fixed;
+      overflow: hidden;
+
+      .nav.nav-tabs {
+        overflow: hidden;
+        white-space: nowrap;
+        > li {
+          float: none;
+          cursor: pointer;
+          display: inline-block;
+          .tab-heading {
+            * {
+              vertical-align: middle;
+            }
+            i {
+              margin-right: .5em;
+            }
+          }
+        }
+        &.nav-stacked {
+          > li {
+            > a, a:hover, a:focus, a:active {
+              border-right: 0;
+            }
+          }
+        }
+      }
+
+      &.inverted {
+        > ul.nav:not(.nav-stacked) {
+          border-bottom-color: @app-tabs-border-colored;
+          margin-top: -1px;
+          > li {
+            margin-bottom: 0;
+            &.active {
+              > a {
+                border-bottom-color: @app-tabs-border-colored;
+              }
+            }
+            > a, a:hover, a:focus, a:active {
+              border-radius: 0;
+              border-top-color: transparent;
+            }
+          }
+        }
+        > .nav.nav-tabs.nav-stacked {
+          > li {
+            border-left: 0;
+          }
+          > li.active {
+            > a, a:hover, a:focus, a:active {
+              border-left-color: transparent;
+            }
+          }
+
+          &:last-of-type a {
+            border-left: 0;
+          }
+        }
+      }
+      .tab-content {
+        height: 90%;
+        max-width: 100%;
+        .calc('height', ~"calc(100% - 4em)");
+        background-color: @app-tabs-bg-color;
+        overflow: auto;
+        position: relative;
+        .tab-pane {
+          position: relative;
+          height: 100%;
+          min-height: 4em;
+          overflow: inherit;
+          display: none;
+          &.active {
+            display: block;
+          }
+          .tab-body {
+            position: relative;
+            border-width: 1px;
+            border-style: solid;
+            border-top-width: 0;
+            height: 100%;
+            width: 100%;
+            overflow: inherit;
+            white-space: normal;
+          }
+        }
+      }
+
+      .nav-tabs.nav-stacked {
+        width: 20%;
+        float: left;
+        height: 100%;
+        vertical-align: top;
+        overflow-y: auto;
+        overflow-x: hidden;
+        display: block;
+        > li {
+          margin: 0;
+          display: block;
+          > a {
+            margin: 0;
+            border-radius: 0;
+            white-space: initial;
+            word-break: break-all;
+          }
+          &.active {
+            > a {
+              border-right-color: transparent;
+            }
+          }
+        }
+      }
+      .tab-stacked{
+        float: left;
+        width: 80%;
+        height: 100%;
+        overflow: auto;
+      }
+    }
+
+    /********************************************************************************
+    ************************* Chart widget classes ***********************************
+    *********************************************************************************/
+
+    .app-chart {
+      background-position: center;
+      background-repeat: no-repeat;
+      background-size: 100% auto;
+      &.panel {
+        .panel-heading {
+          position: relative;
+          .panel-icon {
+            margin-right: 0.5em;
+          }
+        }
+        .app-chart-inner {
+          padding: 0 0 5px 0;
+          height: 100%;
+        }
+        .panel-heading +.app-chart-inner {
+          .calc('height', ~"calc(100% - 4em)");
+        }
+      }
+
+      /***to fix the tooltip issue*****/
+      .app-chart-inner {
+        position: relative;
+        .width-height();
+        &.loading {
+          svg {
+            visibility: hidden;
+          }
+        }
+      }
+      position: relative;
+
+      > svg {
+        width: 100%;
+        height: 100%;
+      }
+      .tooltip-container {
+        padding: 0.5em;
+      }
+      .nvd3 {
+        text {
+          font-family: inherit;
+          font-size: inherit;
+          font-weight: normal;
+        }
+        .nv-axis {
+          line{
+            stroke: rgba(128,198,198,0.2);
+          }
+          path {
+            stroke: rgba(128,198,198,0.6);
+          }
+        }
+        &.nv-pie path {
+          stroke: rgba(255,255,255,0.5);
+        }
+      }
+      .app-spinner {
+        background-color: inherit;
+      }
+    }
+
+    /********************************************************************************
+    ************************* Mobile actions container for header classes ************
+    *********************************************************************************/
+    .app-mobile-header {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      z-index: 9999;
+      display: none;
+    }
+
+    /********************************************************************************
+    ************************* Toaster position classes ******************************
+    *********************************************************************************/
+    #toast-container {
+      max-height: 80%;
+      overflow-y: auto;
+      .toast-title, .toast-message {
+        word-wrap: break-word;
+      }
+      > .toast-info,
+      > .toast-wait,
+      > .toast-error ,
+      > .toast-success,
+      > .toast-warning {
+        background-position: 1em 1em;
+      }
+    }
+
+    .toast-top-center {
+      top: 0;
+      right: 0;
+      width: 100%;
+      > div {
+        margin: auto;
+      }
+    }
+
+    .toast-center-center {
+      left: 50%;
+      top: 50%;
+      margin-top: -30px;
+      margin-left: -150px;
+      > div {
+        margin: auto;
+      }
+    }
+
+    .toast-bottom-center {
+      bottom: 0;
+      right: 0;
+      width: 100%;
+      > div {
+        margin: auto;
+      }
+    }
+
+    .toast-center-left {
+      left: 12px;
+      top: 50%;
+      margin-top: -30px;
+      > div {
+        margin: auto;
+      }
+    }
+
+    .toast-center-right {
+      right: 12px;
+      top: 50%;
+      margin-top: -30px;
+      > div {
+        margin: auto;
+      }
+    }
+
+    .app-calendar {
+      display: inline-block;
+      position: relative;
+      .well {
+        padding: 0;
+        margin-bottom: 0;
+        border: none;
+        table thead tr th button {
+          &.float-left, &.float-right {
+            font-size: 21px;
+            padding-top: 0;
+            padding-bottom: 0;
+          }
+        }
+      }
+      /***overriding the calendar classes*****/
+      .fc {
+        .fc-view-container {
+          background: #fff;
+        }
+        table {
+          background-color: transparent;
+        }
+        th {
+          text-align: center;
+          &:not(.fc-axis) {
+            padding: 1em 0;
+            text-align: center;
+          }
+        }
+        .fc-event {
+          font-size: 12px;
+          border-radius: 0;
+          text-decoration: none;
+          border: 1px solid rgba(0,0,0,0.2);
+          padding: 2px 4px;
+          background-color: #fff;
+        }
+        .fc-toolbar {
+          margin-bottom: 0.25em;
+          padding: 0 0.5em;
+          .fc-button {
+            border-radius: 0;
+            box-shadow: none;
+            background: #fff;
+            border-color: rgba(0,0,0,0.1);
+            text-shadow: 0;
+          }
+          //title
+          h2 {
+            font-size: 1.1rem;
+            margin-top: 0;
+            margin-bottom: 0;
+          }
+
+          > * > * {
+            margin: 0;
+          }
+          .fc-today-button {
+            margin-left: .75em;
+          }
+        }
+        .fc-divider {
+          margin: 0;
+        }
+      }
+    }
+
+    .app-livefilter {
+      position: relative;
+      .panel-heading {
+        .panel-title {
+          display: table;
+          width: 100%;
+        }
+        .panel-actions {
+          display: table-cell;
+          text-align: right;
+          .panel-action {
+            background: transparent;
+            border: none;
+            padding: 0;
+            outline: none;
+          }
+        }
+      }
+      .form-control {
+        display: inline-block;
+      }
+      .app-button, .form-control {
+        margin-bottom: 4px;
+        margin-right: 8px;
+      }
+      .app-button {
+        float: right;
+      }
+      .form-group {
+        .list-group {
+          margin-bottom: 0px;
+        }
+        .checkbox , .radio {
+          margin-top: 0px;
+        }
+        div.col-md-4 {
+          padding-right: 4px;
+        }
+      }
+    }
+
+    // Custom styles for form widgets within liveform and livefilter
+    .wm-app {
+      // overriding bootstrap input group sizes
+      .app-timeinput, .app-datetime {
+        &.input-group-lg .form-control {
+          font-size: 16px;
+          line-height: 1.3333333;
+          border-radius: 0px;
+        }
+        &.input-group-sm .form-control {
+          font-size: 11px;
+          line-height: 1.5;
+          border-radius: 0px;
+        }
+      }
+      .app-liveform, .app-livefilter {
+        .form-control {
+          border-radius: 0;
+        }
+        .app-date, .app-timeinput, .app-datetime {
+          .input-group-btn {
+            .btn.btn-default, .btn.btn-default:hover {
+              border-radius: 0;
+              border: 1px solid @wm-standard-border-color;
+            }
+          }
+        }
+        .app-currency {
+          .input-group-addon {
+            border-radius: 0;
+            border-right: 1px solid @wm-standard-border-color;
+          }
+        }
+        .app-switch {
+          .btn-group {
+            > .btn.btn-default {
+              border:1px solid @wm-standard-border-color;
+              &:hover, &.active , &:focus {
+                border:1px solid @wm-standard-border-color;
+              }
+            }
+          }
+        }
+        &.align-right.position-top {
+          .radio.app-radio, .app-checkbox.checkbox {
+            .app-radioset-label, .app-checkboxset-label {
+              input[type="checkbox"], input[type="radio"] {
+                margin-right: -20px;
+              }
+            }
+          }
+          .app-switch {
+            .btn-group {
+              .btn.btn-default:first-child {
+                border: 1px solid @wm-standard-border-color;
+                border-top-right-radius: 19px;
+                border-bottom-right-radius: 19px;
+                border-top-left-radius: 0;
+                border-bottom-left-radius: 0;
+              }
+              .btn.btn-default:last-child {
+                border: 1px solid @wm-standard-border-color;
+                border-top-right-radius: 0;
+                border-bottom-right-radius: 0;
+                border-top-left-radius: 19px;
+                border-bottom-left-radius: 19px;
+              }
+            }
+          }
+        }
+      }
+      .app-liveform, .app-livefilter, .app-form {
+        .app-chips.readonly .app-chip-search {
+          display: none;
+        }
+      }
+    }
+
+    /********************************************************************************
+    ************************* Login form classes ******************************
+    *********************************************************************************/
+    .app-login {
+      position: relative;
+      overflow : auto;
+      .app-message {
+        word-break: break-word;
+        padding: 4px;
+        margin: 1em 1.5em 0;
+        /*To overcome specificity issue*/
+        &.alert {
+          margin-bottom: 0;
+        }
+      }
+
+      .app-form.app-login-form {
+        padding: 2.5em 3em;
+        .app-login-button {
+          margin-right: 0;
+        }
+        .app-login-rememberme {
+          float: left;
+        }
+        .app-login-forgotlink {
+          float: right;
+          margin-top: 10px;
+          display: inline-block;
+        }
+      }
+    }
+
+    /************************************************************************************
+    *************************Rating Widget Style**************************************
+    ************************************************************************************/
+    @app-rating-star-color: rgb(247, 220, 111);
+    @app-rating-star-hover-color: #DBC631;
+
+    .app-ratings {
+      display: inline-block;
+      vertical-align: middle;
+      position: relative;
+      font-size: 1em;
+      .ratings-wrapper > * {
+        vertical-align: middle;
+      }
+      .active {
+        color:@app-rating-star-color;
+      }
+      .disabled {
+        color:#D3D3D3;
+      }
+      .ratings-wrapper > label.caption {
+        margin: auto 0.25em;
+        font-size: 120%;
+      }
+      .rating-style {
+        display: inline-block;
+        > label {
+          position: relative;
+          float: right;
+          margin: 0;
+          &:before {
+            margin: 1px;
+            font-family: FontAwesome;
+            content: "\f006";
+          }
+          &.active {
+            &:before {
+              content: "\f005";
+            }
+          }
+          > input {
+            display: none;
+          }
+          &:hover ~ label,
+          &:hover {
+            color: @app-rating-star-hover-color;
+          }
+        }
+      }
+
+      .ratings-container {
+        display: inline-block;
+        text-align: left;
+        position: relative;
+        > * {
+          vertical-align: middle;
+        }
+        &:before{
+          content: "\f005\f005\f005\f005\f005\f005\f005\f005\f005\f005";
+          font-family: FontAwesome;
+          position: absolute;
+          width: inherit;
+          overflow: hidden;
+          top: 0;
+          left: 0;
+          white-space: nowrap;
+        }
+        .ratings {
+          font-size: inherit;
+          left: 0;
+          width:100%;
+          overflow: hidden;
+          display: inline-block;
+          &:before{
+            content: "\f005\f005\f005\f005\f005\f005\f005\f005\f005\f005";
+            font-family: FontAwesome;
+            position: absolute;
+            overflow: hidden;
+            width: inherit;
+            top: 0;
+            left: 0;
+            white-space: nowrap;
+          }
+        }
+      }
+    }
+
+    /************************************************************************************
+    *************************Panel Widget Style**************************************
+    ************************************************************************************/
+    .app-panel, .app-card, .app-accordion-panel {
+      .panel-heading {
+        .panel-actions {
+          .panel-action {
+            i {
+              font-style: normal;
+            }
+          }
+        }
+      }
+    }
+
+    /*** progress bar ***/
+    .app-progress {
+      .progress-bar {
+        .app-progress-label[data-caption-placement="hidden"] {
+          display: none;
+        }
+        .app-progress-label {
+          height: 100%;
+          display: inline-block;
+          vertical-align: middle;
+          &::before {
+            content: "";
+            height: 100%;
+            display: inline-block;
+            vertical-align: middle;
+          }
+        }
+      }
+    }
+
+    /*** progress circle bar ***/
+    .app-progress.circle.progress {
+      width: 100%;
+      background-color: transparent;
+      box-shadow: none;
+      > svg {
+        path:first-of-type {
+          stroke: #ddd;
+        }
+        path:last-of-type {
+          stroke: #4489ff;
+          stroke-linecap: round;
+        }
+      }
+      .progress-text {
+        font-family: 'Helvetica', 'sans-serif';
+        font-size: 1.5rem;
+        color: #464646;
+        &.show-percent:after {
+          content: ' %';
+          font-size: 0.7em;
+        }
+      }
+      circle-progress > svg {
+        circle:last-of-type {
+          stroke: #ddd;
+        }
+        path:first-of-type {
+          stroke: #4489ff;
+        }
+      }
+      &.progress-circle-success {
+        svg {
+          path:last-of-type {
+            stroke: #4caf50;
+          }
+        }
+      }
+      &.progress-circle-warning {
+        svg {
+          path:last-of-type {
+            stroke: #ffb300;
+          }
+        }
+      }
+      &.progress-circle-info {
+        svg {
+          path:last-of-type {
+            stroke: #03a9f4;
+          }
+        }
+      }
+      &.progress-circle-danger {
+        svg {
+          path:last-of-type {
+            stroke: #F44336;
+          }
+        }
+      }
+    }
+
+    .wm-app .app-global-progress-bar{
+      &.modal {
+        background: rgba(0, 0, 0, 0.5);
+        display: table;
+        width: 100%;
+        height: 100%;
+      }
+      .app-dialog {
+        display: table-cell;
+        height: 100%;
+        vertical-align: middle;
+        padding: 10px;
+        .modal-content{
+          padding: 0;
+          max-width: 300pt;
+          margin: 0 auto;
+          .instance-list .instance-list-item {
+            border-bottom : 1px solid #ddd;
+            padding: 5px 10px;
+          }
+          .instance-list .instance-list-item:last-child{
+            border-bottom-width : 0;
+          }
+          .app-global-progress-bar-progress-label-col{
+            text-align: right;
+          }
+          .app-global-progress-bar-progress-label{
+            color: #aaa;
+          }
+          .app-progress {
+            margin : 0;
+          }
+          .stop-btn {
+            margin-top: 5px;
+          }
+        }
+      }
+    }
+
+    .app-datetime {
+      .form-group {
+        input {
+           min-width: 45px;
+        }
+      }
+      tbody {
+        .btn.btn-link {
+           padding-left: 15px;
+           padding-right: 15px;
+           span {
+             display: inline-block !important;
+           }
+        }
+      }
+      tr {
+        td {
+      	  &:first-child {
+      		 padding-left: 15px;
+      	  }
+      	  &:last-child {
+      		 padding-right: 15px;
+      	  }
+        }
+      }
+      &.input-group {
+        .app-dateinput {
+          &.form-control {
+            position: absolute;
+            z-index: -1 !important;
+            width: 1px;
+          }
+        }
+      }
+      &.dropdown-menu {
+        z-index: 2000 !important;
+      }
+    }
+
+    .app-date {
+      .uib-datepicker-popup.dropdown-menu {
+        z-index: 2000;
+      }
+      &[disabled="disabled"] {
+        > .input-group-btn {
+          .btn-date {
+            opacity:  0.65;
+            cursor: not-allowed;
+          }
+        }
+      }
+    }
+
+    .app-form {
+      .overlay {
+        background: rgba(255, 255, 255, 0.5);
+        text-align: center;
+        padding: 1em;
+      }
+    }
+
+    //carousel styles
+    .app-carousel .carousel.slide{
+      height: inherit;
+      width: inherit;
+      .carousel-control {
+        .icon-prev, .icon-next {
+          margin-top: -30%;
+          font-size: 70px;
+          cursor: pointer;
+        }
+      }
+    }
+.app-number.form-control {
+  &.invalid {
+    border-color: transparent;
+    background-image: none;
+    border-bottom: 2px solid #F44336;
+  }
+}
+
+//Focus styles for Menu in navbar
+.wm-app .app-navbar .navbar-nav ul.dropdown-menu li a:focus {
+  background-color: rgba(0,0,0,0.15);
+}
+.wm-app .popover.fade {
+  &.bottom, &.top, &.left, &.right {
+    >.arrow {
+      margin: 0;
+    }
+    >.popover-inner {
+      height: 100%;
+      overflow: auto;
+    }
+  }
+}
+.wm-app .app-popover .panel {
+  border: 0;
+  box-shadow: none;
+}
+
+.wm-app app-prefab-__self__ {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+/*====================================================================================================================
+  END - Widgets
+
+/*Third party style sheets*/
+@import (less) "../../components/angular-toaster/toaster.css";
+

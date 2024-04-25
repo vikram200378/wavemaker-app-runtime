@@ -1,0 +1,233 @@
+/********************************************************************************
+*********************** Segmented Control classes ******************************
+*********************************************************************************/
+.app-segmented-control {
+  position: relative;
+  overflow: hidden;
+  .width-height();
+  > .btn-group.btn-group-justified {
+    position: absolute;
+    left: 0;
+    top: 0;
+    right: 0;
+    z-index: 99;
+    overflow: hidden;
+    .app-icon {
+      width: auto;
+    }
+    a.btn {
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+  }
+  &.bottom {
+    > .btn-group {
+      bottom: 0;
+    }
+  }
+  .app-segments-container {
+    .width-height();
+    overflow: hidden;
+    position: relative;
+    > ul {
+      .width-height();
+      white-space: nowrap;
+      margin: 0;
+      padding: 0;
+      > li.app-segment-content{
+        display: inline-block;
+        white-space: normal;
+        .width-height();
+        padding-top: 3em;
+        position: relative;
+        vertical-align: top;
+        overflow-y: auto;
+        overflow-x: hidden;
+      }
+    }
+  }
+}
+/********************************************************************************
+*********************** Mobile File Selector classes ******************************
+*********************************************************************************/
+.app-file-browser {
+  .modal-backdrop{
+    z-index: 10000;
+  }
+  .modal .modal-dialog{
+    margin: 0;
+  }
+  .modal-dialog {
+    height: 100%;
+
+    .modal-content {
+      height: 100%;
+      border-radius: 0;
+
+      .modal-header {
+        height : 4em;
+        padding: 5px;
+        box-shadow: 0px 2px 1px rgba(0, 0, 0, 0.5);
+        .modal-title {
+          padding: 10px;
+        }
+      }
+      .modal-body {
+        .calc('height', ~"calc(100% - 9em)");
+        overflow-x: hidden;
+        overflow-y: auto;
+        width: 100%;
+        padding: 0;
+        margin : 0;
+      }
+      .modal-footer {
+        height : 5em;
+        box-shadow: 0px -1px 1px rgba(0, 0, 0, 0.5);
+      }
+    }
+  }
+
+  .selected-file-button{
+    font-size: 2em;
+  }
+
+  .file-info-box {
+    border-bottom: 1px solid #ddd;
+    .file-info {
+      .file-icon {
+        font-size: 4em;
+        padding : 5px;
+      }
+      .file-name {
+        font-size: 0.9em;
+        width: 240px;
+        word-wrap: break-word;
+        display: inline-block;
+        vertical-align: middle;
+      }
+    }
+  }
+}
+/******************************** Cordova styles ****************************************/
+.wm-app {
+  /**********************************Date, time widgets*****************************/
+  &.cordova {
+    input[type='date'], input[type='datetime-local'], input[type='time'] {
+      &.ng-empty:before {
+        content: attr(placeholder);
+      }
+    }
+  }
+}
+.mobile-app-page {
+  @app-page-content-loader-fg-color: rgba(0,0,0,0.5);
+  .app-page-content {
+    .app-page-content-loader {
+      width: 100%;
+      height: 100%;
+      position: absolute;
+      top: 0;
+      overflow: hidden;
+      .loader {
+        height: 0;
+        width: 100%;
+        &:before {
+          display: block;
+          position: absolute;
+          content: "";
+          width: 10%;
+          height: 2pt;
+          background-color: @app-page-content-loader-fg-color;
+          -webkit-animation: toAndFro 2s linear 0.1s infinite;
+          animation: toAndFro 2s linear 0.1s infinite;
+        }
+      }
+    }
+  }
+/****************************************************************************************************
+*****************************************File upload ***************************************************
+******************************************************************************************************/
+  .app-fileupload .file-upload {
+    .file-upload-status .upload-file-list  {
+      .file-details {
+        .file-detail{
+            .progress {
+              height: 5px;
+              margin: 0.5em;
+            }
+        }
+      }
+    }
+  }
+  .form-group input[type=file] {
+    width : 100%;
+  }
+}
+/****************************************************************************************************
+*****************************************backend service info toaster *******************************
+******************************************************************************************************/
+.network-info-toaster {
+  background: #000;
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  z-index: 100000;
+  .network-info-toaster-content{
+    padding: 5pt 10pt;
+  }
+  &.ng-hide-add{
+    transition: transform 200ms linear;
+    transform: translate3d(0, 0, 0);
+  }
+  &.ng-hide-add-active {
+    transform: translate3d(0, 100%, 0);
+  }
+  &.ng-hide-remove {
+    transition: transform 200ms linear;
+    transform: translate3d(0, 100%, 0);
+  }
+  &.ng-hide-remove-active {
+    transform: translate3d(0, 0, 0);
+  }
+  .info{
+    color: #fff;
+    clear: both;
+  }
+  .message{
+    line-height: 28pt;
+    float: left;
+  }
+  .btn{
+    float: right;
+  }
+}
+
+// calendar styles - datepicker
+daypicker, monthpicker, yearpicker {
+  table {
+    width: 100%;
+  }
+}
+
+.app-calendar-event {
+  &.btn {
+    span:after {
+      content: '\f111\00a0\f111\00a0\f111';
+      color: rgba(0, 0, 0, 0.2);
+      font-family: 'FontAwesome';
+      display: block;
+      font-size: 6px;
+      line-height: 2px;
+    }
+    &.one {
+      span:after {
+        content: "\f111";
+      }
+    }
+    &.two {
+      span:after {
+        content: "\f111\00a0\f111";
+      }
+    }
+  }
+}
